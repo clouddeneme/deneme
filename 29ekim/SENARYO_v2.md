@@ -9,12 +9,12 @@
 
 > **Karanlıktan aydınlığa, sıfırdan 103 yıla.**
 
-Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal imlecinin karanlığında başlar. Güneş, Cumhuriyet'in ilanıyla doğar. Sabah ışığında ülke kurulur, gün ışığında Kocaeli'de kâğıt üretilir ve üzerine Cumhuriyet'in sözü yazılır. Gün batımında İzmit Saat Kulesi 103 yılı sayar. Video, mavi saatte havai fişeklerle ve bir bayram tebriğiyle biter.
+Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal imlecinin karanlığında başlar. Güneş, Cumhuriyet'in ilanıyla doğar. Sabah ışığında ülke kurulur, gün ışığında Kocaeli'de kâğıt üretilir ve üzerine Cumhuriyet'in sözü yazılır. Gün batımında İzmit Saat Kulesi 103 yılı sayar. Mavi saatte sokaklar fener alayıyla dolar, insanların fenerleri yukarıdan bakınca ay-yıldızı ve 103'ü oluşturur. Video bir bayram tebriğiyle biter.
 
 **Üç kural:**
-1. **Tek plan.** Kesme ve siyaha kararma yok. Her sahne bir öncekinin içinden doğar: rakam kora, kor haritaya, harita kâğıda, kâğıt saat kadranına dönüşür.
+1. **Tek plan.** Kesme ve siyaha kararma yok. Her sahne bir öncekinin içinden doğar: rakam kora, kor haritaya, harita kâğıda, kâğıt saat kadranına, kule fener alayına dönüşür. Bütün geçişler kamera hareketiyle kurgulanır (bkz. bölüm 5).
 2. **Hiç geri kararmaz.** Işık sürekli artar. En karanlık an ilk 3 saniyedir, ondan sonra gökyüzü hep aydınlıktır.
-3. **Kocaeli omurgadır.** Uçuş Kocaeli'den başlar, Kocaeli'ye döner, kâğıt Kocaeli'de doğar, final Kocaeli'de biter.
+3. **Kocaeli omurgadır, tebrik herkesedir.** Uçuş Kocaeli'den başlar, Kocaeli'ye döner, kâğıt Kocaeli'de doğar, final İzmit Saat Kulesi'nde geçer. Kapanış tebriği ise genel olur, yer adı içermez.
 
 ---
 
@@ -29,7 +29,7 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 | Sabah | 0:10–0:20 | Açık gök mavisi `#78B4EB`, denizler `#4F8FC0` | Kara kum-altın `#E8C482`, Kocaeli kırmızısı `#E30A17` |
 | Gün ışığı | 0:20–0:31 | Krem, güneş ışığı `#FFF6E4` | Mürekkep `#1D1A17` |
 | Gün batımı | 0:31–0:40 | Mor → pembe → turuncu (`#4659AA → #EB786E → #FFBE78`) | Kule kremi `#E6D8B8`, bayrak `#E30A17` |
-| Mavi saat | 0:40–0:45 | Derin mavi `#14286E → #3250A0`, asla siyah değil | Havai fişek kırmızı, beyaz, altın |
+| Mavi saat | 0:38–0:45 | Derin mavi `#14286E → #3250A0`, asla siyah değil | Fener sarısı `#FFC864`, bayrak kırmızısı |
 
 ### Tipografi
 - **Ana cümleler:** Cormorant Garamond 600 (zarif serif). Karanlık sahnelerde fildişi ve hafif gölgeli, aydınlık sahnelerde mürekkep rengi ve gölgesiz.
@@ -48,7 +48,7 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 
 - **Tonalite:** Re majör. Baştan umutlu, giderek coşkulu. Minör yalnızca ilk 3 saniyede gölge olarak var.
 - **Tempo:** 120 BPM. Bir ölçü 2 saniye, bütün kesme ve durak noktaları ölçü başlarına denk gelir.
-- **Enstrümanlar** (hepsi kodla sentezlenir): saat tıkırtısı, yaylı pad, pizzicato benzeri pluck, piyano, bakır ses, çan, büyük davul, zil, havai fişek patlamaları.
+- **Enstrümanlar** (hepsi kodla sentezlenir): saat tıkırtısı, yaylı pad, pizzicato benzeri pluck, piyano, bakır ses, çan, büyük davul, zil, bando trampeti ve uzaktan kalabalık uğultusu.
 - **Motif:** Dört notalık bir "Cumhuriyet motifi": **Re – La – Si – La**. Önce piyanoda tek başına (kâğıt sahnesi), sonra bakırda ve tam orkestrada (final) duyulur.
 
 | Süre | Müzik |
@@ -60,7 +60,7 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 | 0:20–0:31 | Ritim çekiliyor. Kâğıt makinesinin ritmi düşük bir tıkırtıyla sürüyor. Mürekkep yazarken piyanoda motif çalıyor. |
 | 0:31–0:36 | Kadranda yıllar akarken tıkırtılar hızlanıp bir vızıltıya dönüşüyor. Gerilim akoru: A. |
 | 0:36 | Doruk: Re majör, tam orkestra, bakırda motif, zil. |
-| 0:39–0:43 | Havai fişek patlamaları müzikle eşzamanlı. |
+| 0:38–0:44 | Bando: trampet ve davul yürüyüş ritmi, uzaktan kalabalığın uğultusu. Bakırda motif son kez ve tam haliyle. |
 | 0:44,6 | Son "tik". Yankı. |
 
 ---
@@ -81,7 +81,7 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 **Görüntü:**
 - 0:04,0 Rakamlar 30.000 kora dönüşüp patlıyor.
 - 0:04,2 – 0:06,5 **Kamera korların içine dalıyor.** Kıvılcımlar kameranın yanından geçiyor, objektif ileri ve aşağı dönüyor. 90°'lik bir pike: ekranın altında, uzakta karanlık bir zemin beliriyor.
-- 0:06,5 – 0:08,0 Korlar zemine yağıyor. Düştükleri yerde **Türkiye'nin kıyı çizgisi** yanıyor, korlar ülkenin içine yerleşiyor. Komşu ülkeler soluk kum renginde, denizler koyu mavi beliriyor.
+- 0:06,5 – 0:08,0 Kameranın takip ettiği "kahraman kor" **Kocaeli'ye** düşüyor. **Türkiye'nin kıyı çizgisi** oradan başlayarak iki yöne doğru yanıyor, bütün ülkeyi çevreliyor. Diğer korlar ülkenin içine yerleşiyor. Komşu ülkeler soluk kum renginde, denizler mavi beliriyor.
 - 0:07,0 **Güneş doğuyor.** Ufkun doğusunda (Kafkaslar yönünde) güneş yükseliyor, ilk ışık haritanın üzerinden yayılıyor.
 
 **Kamera:** Dalıştan yatay uçuşa geçiş. Haritanın 1,5 birim üzerinde, ufka 20° bakan alçak bir açıyla batıya, Kocaeli'ye doğru dönüyor.
@@ -164,32 +164,69 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 **Yazı:** Sayaç durunca: **Cumhuriyet'in 103 yılı.**
 **Ses:** Tıkırtılar akrep ve yelkovana bağlı olarak hızlanıp vızıltıya dönüşüyor. Gerilim akoru La, yükselen zil.
 
-### PLAN 13 · Saat Kulesi ve bayrak (0:36,4–0:40,0)
-**Işık:** Gün batımı. Gökyüzü mor, pembe ve turuncu. Kulenin krem taşı batı güneşiyle altın renginde parlıyor. Pencerelerden sıcak ışık sızıyor.
+### PLAN 13 · Saat Kulesi ve bayrak (0:36,4–0:38,5)
+**Işık:** Gün batımı. Gökyüzü mor, pembe ve turuncu. Kulenin krem taşı batı güneşiyle altın renginde parlıyor, pencerelerden sıcak ışık sızıyor.
 **Görüntü:**
 - 0:36,4 Kamera kadrandan geriye çekiliyor ve **İzmit Saat Kulesi**'nin tamamı ortaya çıkıyor: teras, kahverengi korkuluk, madalyonlar, saat katı, sivri külah.
 - **Kulenin sağında, meydanda bir gönder** var. Gönderde büyük bir **Türk Bayrağı** dalgalanıyor. Bayrak gerçek bir kumaş simülasyonuyla hesaplanıyor: ağırlığıyla sarkıyor, rüzgârda kıvrılıyor, ucu çırpınıyor. Ölçüler 2893 sayılı Kanun'daki gibi, renk #E30A17.
-- Bayrak, gün batımı güneşini arkadan alıyor ve kumaşın içinden ışık süzülüyor.
+- Bayrak gün batımı güneşini arkadan alıyor ve kumaşın içinden ışık süzülüyor.
 
-**Kamera:** Kadrandan geriye doğru 12 birimlik bir çekilme. Aynı anda sağa doğru 25°'lik yay hareketi: kule sol üçte birde, bayrak sağ üçte birde.
+**Kamera:** Kadrandan geriye doğru 12 birimlik çekilme, aynı anda sağa doğru 25°'lik bir yay: kule sol üçte birde, bayrak sağ üçte birde.
 **Ses:** **Doruk.** Re majör, tam orkestra, bakırda Cumhuriyet motifi, zil, davul.
 
-### PLAN 14 · Mavi saat: 103 (0:40,0–0:45,0)
-**Işık:** Güneş battı. Gökyüzü derin mavi, ufukta son bir turuncu çizgi. Kule ve bayrak ışıklandırmayla aydınlanıyor. Arkada kentin sıcak ışıkları var.
+### PLAN 14 · Fener alayı (0:38,5–0:42,0)
+**Işık:** Güneş batıyor, gökyüzü mavi saate dönüyor: derin mavi ve ufukta son bir turuncu çizgi. Kule ve bayrak ışıklandırmayla aydınlanıyor.
 **Görüntü:**
-- 0:39,6 İlk havai fişekler kulenin arkasında patlıyor: kırmızı, beyaz ve altın renkte, müzikle eşzamanlı.
-- 0:40,6 – 0:42,0 Havai fişeklerin kıvılcımları dağılmadan gökyüzünde toplanıp **"103"** rakamını oluşturuyor.
-- 0:42,0 Altında:
-  > **29 Ekim Cumhuriyet Bayramımız kutlu olsun.**
-  > `KOCAELİ`
-- 0:44,6 Son "tik". 0:44,7 – 0:45,0 görüntü maviye (siyaha değil) yumuşakça kararıyor.
+- 0:38,5 Meydana açılan sokaklarda **fenerler** tek tek yanıyor: sıcak sarı küçük alevler ve aralarında küçük kırmızı bayraklar.
+- 0:39,0 – 0:41,0 Fenerler ırmaklar gibi akarak meydana, kulenin çevresine doğru ilerliyor. Her fener hafifçe sallanıyor, yürüyen insanların ritmiyle.
+- 0:40,0 Kamera yükselmeye başlıyor. Fenerler meydanda yerlerini alıyor.
 
-**Kamera:** Çok yavaş bir yükselme. Kule ve bayrak alt üçte birde, "103" gökyüzünde.
-**Ses:** Havai fişek patlamaları, finalde motifin tam hali, son tik ve yankı.
+**Kamera:** Kule ile bayrağın arasından yukarı ve öne doğru bir vinç hareketi, sonra kulenin üzerinden aşarak meydana bakan yüksek bir açı.
+**Ses:** Bando trampeti ve davul, kalabalığın uzaktan gelen uğultusu, bakırda motif.
+
+### PLAN 15 · Yukarıdan: ay-yıldız ve 103 (0:42,0–0:45,0)
+**Görüntü:**
+- 0:42,0 Kamera **tam kuşbakışına** dönüyor. Yukarıdan bakınca meydandaki fenerlerin birlikte **ay-yıldızı** oluşturduğu görülüyor. Fenerlerin oluşturduğu ay-yıldız da kanundaki oranlarla dizilmiş. Ortasında, küçücük kalmış Saat Kulesi'nin külahı görünüyor.
+- 0:42,4 Ay-yıldızın yanında, yine fenerlerden **"103"**.
+- 0:42,8 Ekranın alt üçte birinde:
+  > **29 Ekim Cumhuriyet Bayramımız kutlu olsun.**
+- 0:44,6 Son "tik". 0:44,7–0:45,0 görüntü derin maviye yumuşakça kararıyor (siyaha değil).
+
+**Kamera:** Kuşbakışında çok yavaş bir yükselme ve 10°'lik bir dönüş. Fenerler titreşerek yaşıyor.
+**Ses:** Motifin son akoru, son tik ve yankı.
 
 ---
 
-## 5. Teknik notlar
+## 5. Kamera kurgusu: akışa kendimizi kaptıralım
+
+Bütün video **hiç durmayan tek bir kamera yolu**. Kamera hiçbir yerde tam durmuyor; sahneler kameranın içinden geçtiği yerlerdir. Her geçiş bir **hareketle** kuruluyor, kesme ya da kararma kullanılmıyor. Drone uçuşunun rotası `kamera-rotasi.png` görselinde.
+
+| # | Geçiş | Süre | Hareket | Nasıl bağlanıyor |
+|---|---|---|---|---|
+| G1 | İmleç → kor | 0:03,5–0:04,5 | **İçinden geçiş (push-through)** | Kamera hızlanarak `1923`'teki **0**'ın içine dalıyor. Rakamlar o anda kora dönüşüyor, kamera kıvılcımların arasından çıkıyor. |
+| G2 | Kor → harita | 0:04,5–0:08,0 | **Takip + 90° pike** | Kamera bir "kahraman kor"u takip ediyor. Kor düşerken kamera aşağı dönüyor. Kor **Kocaeli'ye** düşüyor ve kıyı çizgisi oradan başlayarak bütün ülkeye yanıyor. Kamera yere yaklaşırken yatay uçuşa geçiyor. |
+| G3 | Kocaeli → Ankara | 0:09,6–0:10,4 | **Yatış + tırmanış** | Körfezden çıkarken kamera sola yatıp doğuya dönüyor. Ufukta Ankara'nın ışığı beliriyor. |
+| G4 | Ankara → harfler | 0:11,6–0:12,4 | **Yukarı bakış (tilt-up)** | Işık dalgası kameranın altından geçerken kamera yukarı bakıyor. Haritadan havalanan harfler kadraja giriyor ve kamera doğrudan onlara uçuyor. |
+| G5 | Harfler → tren | 0:13,6–0:14,4 | **Arasından geçip pike** | Son harf kameranın yanından geçtiği anda kamera aşağı dalıyor ve demiryolunun yanına, trenin hizasına iniyor. |
+| G6 | Tren → 1934 | 0:15,6–0:16,4 | **Vinç yükselişi** | Tren Erzurum'a vardığında kamera trenden ayrılıp dikey yükseliyor. Bütün ülke kadraja giriyor ve ışıklar çiçek açıyor. |
+| G7 | 1934 → Kocaeli | 0:17,0–0:19,0 | **180° geniş dönüş + pike** | Kamera ufku eğerek batıya dönüyor (hafif yatış), sonra Kocaeli'ye 45° pike yapıyor. Kocaeli 3B olarak tam kameranın önünde yükseliyor. |
+| G8 | Kocaeli → kâğıt makinesi | 0:19,0–0:21,0 | **Akışla birlikte dalış** | Kocaeli'deki ışık girdabı hamura dönüşüp silindirlere akıyor. Kamera akışı takip edip **iki silindirin arasından geçiyor** ve kâğıt şeridinin üzerine çıkıyor. |
+| G9 | Şerit → yaprak | 0:23,5–0:25,0 | **Yükselip kuşbakışına dönüş** | Şerit yavaşlarken kamera yükselip aşağı dönüyor. Kesilen yaprak havalanıyor ve kameraya doğru gelip kadrajı tam dolduruyor. |
+| G10 | Yaprak → kadran | 0:31,0–0:32,6 | **Beyazdan beyaza eşleşme** | Rüzgâr yaprağı kaldırıyor, kamera yaprağın kıvrılan beyaz yüzeyine yaklaşıyor. Ekran neredeyse tamamen beyazken kamera 90° dönüyor. Geri çekildiğinde aynı beyaz artık **saat kadranının** yüzü oluyor. |
+| G11 | Kadran → kule | 0:36,4–0:38,5 | **Geri çekilme + yay (reveal)** | Kamera kadrandan uzaklaşırken sağa doğru yay çiziyor. Kule bütünüyle, yanında bayrakla ortaya çıkıyor. |
+| G12 | Kule → fener alayı | 0:38,5–0:42,0 | **Vinç + kulenin üzerinden aşma** | Kamera kule ile bayrak arasından yükseliyor, külahın üzerinden geçiyor ve aşağıya, fenerlerle dolan meydana bakıyor. |
+| G13 | Meydan → kuşbakışı | 0:41,0–0:42,0 | **Spiral yükseliş** | Kamera dönerek yükseliyor ve tam tepeden bakışa geçiyor. O anda fenerler ay-yıldızı oluşturmuş oluyor. |
+
+**Hareket kuralları:**
+- **Ataletli kamera:** Hız asla aniden değişmiyor, her hareket bir öncekinin hızını devralıyor. Yol, bütün ara noktalardan geçen yumuşak bir eğri (Catmull-Rom spline) olarak hesaplanıyor.
+- **Drone yatışı:** Dönüşlerde ufuk dönüş yönüne doğru 6–12° eğiliyor. Dönüş bitince yavaşça düzeliyor.
+- **Hız hissi:** Alçak uçuşlarda (tren, körfez, kâğıt şeridi) yerdeki detaylar kameranın yanından hızla akıyor, hafif hareket bulanıklığı ekleniyor. Yükselişlerde her şey yavaşlıyor ve nefes alıyor.
+- **Lens nefesi:** Pikelerde görüş açısı 35°'ten 42°'ye açılıyor (hız hissi), duraklarda 32°'ye daralıyor.
+- **Müzikle kilit:** Her geçişin en hızlı anı bir ölçü başına (2 saniyenin katlarına) denk geliyor.
+
+---
+
+## 6. Teknik notlar
 
 | Konu | Yaklaşım |
 |---|---|
@@ -200,9 +237,11 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 | Kâğıttan kadrana geçiş | Kâğıdın beyazı ile kadranın beyazı aynı kare içinde üst üste getirilerek kesmesiz geçiş |
 | Bayrak | Verlet kumaş simülasyonu (72×48 düğüm), direğe bağlı, rüzgâr ve hava direnci hesaplanıyor. Simülasyon önceden hesaplanıyor ve her kare aynı sonucu veriyor. Desen kanundaki ölçülerle analitik çiziliyor, kumaş dokusu ve dikişler var. |
 | Kule | Fotoğraflara göre modellenen İzmit Saat Kulesi, gün batımı ve gece ışıklandırmasıyla |
-| Render | 1350 kare, kare başına yaklaşık 1,6 saniye, toplam yaklaşık 36 dakika |
+| Fener alayı | Sokak hatları boyunca akan, hafif sallanan fener parçacıkları. Varış noktaları, kanundaki oranlarla dizilmiş ay-yıldız ve "103" biçiminde. |
+| Kamera | Bütün video için tek bir spline yolu ve hedef noktası, yatış ve görüş açısı eğrileri. Hızlı geçişlerde 4 alt kareyle hareket bulanıklığı. |
+| Render | 1350 kare, kare başına yaklaşık 1,6 saniye (hızlı geçişlerde daha fazla), toplam yaklaşık 45 dakika |
 
-## 6. Tarihî doğruluk
+## 7. Tarihî doğruluk
 
 | Bilgi | Kaynak notu |
 |---|---|
@@ -214,5 +253,6 @@ Video tek bir günün ışığıyla akar. 1923'ün şafağında, bir terminal im
 | 5 Aralık 1934 · Kadınlara milletvekili seçme ve seçilme hakkı | TBMM |
 | 1936 · İzmit Kâğıt Fabrikası'nda ilk kâğıt (18 Nisan 1936), bugünkü SEKA'nın başlangıcı | SEKA Kâğıt Müzesi kaynakları |
 | İzmit Saat Kulesi · 1902, proje Vedat Tek, 16,4 m | Kültür Portalı, Vikipedi |
+| Fener alayı · 29 Ekim akşamları Kocaeli'de de düzenleniyor | Sözcü (Kocaeli Valiliği fener alayı haberleri) |
 | "Türkiye Cumhuriyeti ilelebet payidar kalacaktır." · Mustafa Kemal Atatürk | |
 | 29 Ekim 2026 = 103. yıl | |
