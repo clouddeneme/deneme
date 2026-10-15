@@ -91,7 +91,39 @@ async function init() {
 
   const focus = { x: 0, y: 0, z: 0, span: 2 };
   const v = new THREE.Vector3();
+  // motion blur: average a few sub-frames on the fast camera moves (180-degree shutter)
+  const accRT = new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType });
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
+  const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), qScene = new THREE.Scene(); qScene.add(quad);
+  const accMat = new THREE.ShaderMaterial({ uniforms: { tSrc: { value: null }, uW: { value: 1 } }, transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: 'uniform sampler2D tSrc; uniform float uW; varying vec2 vUv; void main(){ gl_FragColor = vec4(texture2D(tSrc, vUv).rgb * uW, 1.0); }' });
+  const copyMat = new THREE.ShaderMaterial({ uniforms: { tSrc: { value: accRT.texture } }, depthTest: false, depthWrite: false,
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: 'uniform sampler2D tSrc; varying vec2 vUv; void main(){ gl_FragColor = vec4(texture2D(tSrc, vUv).rgb, 1.0); }' });
+  const BLUR = [[3.9, 4.7], [13.3, 16.2], [16.9, 19.3], [20.1, 21.0], [30.9, 31.5], [36.4, 37.6], [39.6, 41.9]];
+  const subframes = t => (window.noBlur ? 1 : BLUR.some(([a, b]) => t >= a && t <= b) ? 6 : 1);
+
   function renderAt(t) {
+    const n = subframes(t);
+    if (n === 1) { composer.renderToScreen = true; renderScene(t); }
+    else {
+      composer.renderToScreen = false;
+      for (let i = 0; i < n; i++) {
+        renderScene(t + ((i + 0.5) / n - 0.5) * (0.4 / 30));
+        renderer.setRenderTarget(accRT); if (i === 0) renderer.clear();
+        accMat.uniforms.tSrc.value = composer.readBuffer.texture; accMat.uniforms.uW.value = 1 / n; quad.material = accMat;
+        renderer.autoClear = false; renderer.render(qScene, ortho); renderer.autoClear = true;
+      }
+      renderer.setRenderTarget(null); quad.material = copyMat; renderer.render(qScene, ortho);
+    }
+    overlayFor(t);
+    renderer.autoClear = false; renderer.clearDepth();
+    renderer.render(overlay.scene, overlay.cam);
+    renderer.autoClear = true;
+  }
+
+  function renderScene(t) {
     const cs = window.camOverride || track.at(t);
     applyCamera(camera, cs);
     const towerWorld = t >= 31.51;
@@ -127,7 +159,6 @@ async function init() {
     stamp('Sivas', 'SİVAS', '1930', world.cityTimes.Sivas);
     stamp('Erzurum', 'ERZURUM', '1939', world.cityTimes.Erzurum);
     overlay.pins = pins;
-    overlay.draw(t, { dark: t < 7.4 || t > 31.5 });
     finish.uniforms.uWhite.value = smooth(31.2, 31.47, t) * (1 - smooth(T.dial, T.dial + 0.7, t));
     finish.uniforms.uVignette.value = t > 24.5 && t < 31.6 ? 0.12 : 0.28;
 
@@ -135,10 +166,8 @@ async function init() {
     finish.uniforms.uFade.value = 1 - smooth(DURATION - 0.3, DURATION, t);
 
     composer.render();
-    renderer.autoClear = false; renderer.clearDepth();
-    renderer.render(overlay.scene, overlay.cam);
-    renderer.autoClear = true;
   }
+  function overlayFor(t) { overlay.draw(t, { dark: t < 7.4 || t > 31.5 }); }
 
   window.renderAt = renderAt;
   window.DURATION = DURATION;

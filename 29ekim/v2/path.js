@@ -72,7 +72,7 @@ export function paperKeys(ctx) {
   const S = t => M.sheetPos(t);
   const s24 = S(24.2), s25 = S(25.0), sEnd = S(30);
   k(24.2, [s24.x + 0.16, s24.y + 0.42, s24.z + 0.02], [s24.x, s24.y, s24.z], { fov: 36, up: [-0.6, 0, -0.8] });
-  k(25.0, [s25.x, s25.y + 0.54, s25.z], [s25.x, s25.y, s25.z], { fov: 35, up: [0, 0, -1] });
+  k(25.0, [s25.x, s25.y + 0.54, s25.z], [s25.x, s25.y, s25.z], { fov: 35, up: [0, 0, -1], stop: true });
   k(27.0, [sEnd.x - 0.006, sEnd.y + 0.52, sEnd.z], [sEnd.x - 0.006, sEnd.y, sEnd.z], { fov: 35, up: [0, 0, -1] });
   k(29.0, [sEnd.x + 0.006, sEnd.y + 0.5, sEnd.z], [sEnd.x + 0.006, sEnd.y, sEnd.z], { fov: 35, up: [0, 0, -1] });
   k(30.6, [sEnd.x, sEnd.y + 0.49, sEnd.z], [sEnd.x, sEnd.y, sEnd.z], { fov: 35, up: [0, 0, -1] });

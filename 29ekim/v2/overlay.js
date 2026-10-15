@@ -94,7 +94,7 @@ export class Overlay {
 
     // the dial counts the Republic's years
     if (t > T.dial && t < T.reveal + 1.4) {
-      const e = envelope(t, T.dial + 0.5, T.reveal + 1.3, 0.6, 0.7);
+      const e = envelope(t, T.dial + 0.5, T.reveal + 0.9, 0.6, 0.6);
       const spin = ease.inOut(clamp((t - T.years0) / (T.years1 - T.years0)));
       const year = Math.round(1923 + spin * 103);
       g.save(); g.globalAlpha = e; g.textAlign = 'center';

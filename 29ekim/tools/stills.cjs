@@ -13,6 +13,7 @@ const path = require('path');
   await pg.waitForFunction(() => window.ready || window.initError, null, { timeout: 180000 });
   const ie = await pg.evaluate(() => window.initError);
   if (ie) { console.log('INIT ERROR', ie); process.exit(1); }
+  if (process.env.NOBLUR) await pg.evaluate(() => { window.noBlur = true; });
   for (const t of times) {
     const t0 = Date.now();
     await pg.evaluate(t => window.renderAt(t), parseFloat(t));

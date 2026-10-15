@@ -4,7 +4,7 @@ const { chromium } = require(require('child_process').execSync('npm root -g').to
   const b = await chromium.launch();
   const pg = await b.newPage();
   pg.on('pageerror', e => { console.log('pageerror', e); process.exit(1); });
-  await pg.goto('http://127.0.0.1:8123/29ekim/src/audio.html');
+  await pg.goto('http://127.0.0.1:8123/29ekim/' + (process.env.PAGE || 'src') + '/audio.html');
   await pg.waitForFunction(() => window.ready);
   const t0 = Date.now();
   const b64 = await pg.evaluate(() => window.renderWav());
