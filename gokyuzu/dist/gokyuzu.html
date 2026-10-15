@@ -4,7 +4,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap">
 <style>
-/* Layout: an observatory desk; form on the left, the printed chart on the right, the night's facts beneath. One deliberate night palette. */
+/* Layout: a one-screen observatory desk. Desktop: form | poster | facts, each side scrolls on its own.
+   Phone: the poster fills the screen and a bottom tab bar switches to the form or the facts. */
 :root {
   color-scheme: dark;
   --ground: #070b18;
@@ -13,7 +14,7 @@
   --line: #26304f;
   --fg: #e9e6dc;
   --muted: #9097ad;
-  --star: #f3d9a4;        /* warm starlight accent */
+  --star: #f3d9a4;
   --star-dim: #6f5f3e;
   --display: "Instrument Serif", "Times New Roman", Georgia, serif;
   --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -21,47 +22,47 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html, body { height: 100%; }
 body {
-  background: radial-gradient(1200px 700px at 70% -10%, #122042 0%, transparent 60%), var(--ground);
+  background: radial-gradient(1200px 700px at 60% -10%, #122042 0%, transparent 60%), var(--ground);
   background-color: var(--ground);
-  color: var(--fg);
-  font-family: var(--body);
-  font-size: 15px;
-  line-height: 1.5;
-  min-height: 100%;
+  color: var(--fg); font-family: var(--body); font-size: 14px; line-height: 1.45;
+  overflow: hidden;
 }
-.wrap {
-  max-width: 1240px; margin: 0 auto;
+.app {
+  height: 100%;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 28px 48px;
+  padding-block: 14px 14px;
+  gap: 12px;
 }
-header { display: grid; gap: 6px; margin-bottom: 24px; }
-h1 { margin: 0; font: 400 clamp(34px, 5vw, 58px)/1.02 var(--display); letter-spacing: -0.01em; text-wrap: balance; }
+.bar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+h1 { margin: 0; font: 400 clamp(26px, 3vw, 36px)/1 var(--display); letter-spacing: -0.01em; }
 h1 em { color: var(--star); }
-.lede { margin: 0; max-width: 62ch; color: var(--muted); }
-.grid { display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: 28px; align-items: start; }
-@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.lede { margin: 0; color: var(--muted); font-size: 13px; }
+.main { min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr) 300px; gap: 16px; }
+.side { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 
-.panel { display: grid; gap: 16px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.panel { display: grid; gap: 12px; align-content: start; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
 .panel h2 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.field { display: grid; gap: 6px; min-width: 0; }
+.field { display: grid; gap: 5px; min-width: 0; }
 .field label, .lbl { font-size: 13px; font-weight: 500; }
 .hint { font-size: 12px; color: var(--muted); }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
   width: 100%; min-width: 0;
   font: 500 15px/1.2 var(--body); color: var(--fg);
   background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
-  padding: 10px 11px;
+  padding: 9px 10px;
 }
-textarea { resize: vertical; min-height: 56px; line-height: 1.4; }
+textarea { resize: none; height: 52px; line-height: 1.35; }
 input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
-.themes { display: flex; flex-wrap: wrap; gap: 8px; }
+.themes { display: flex; flex-wrap: wrap; gap: 6px; }
 button {
   font: 600 13px/1 var(--body); color: var(--fg);
   background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
-  padding: 10px 12px; cursor: pointer;
+  padding: 9px 11px; cursor: pointer;
 }
 button:hover { border-color: var(--star-dim); }
 button[aria-pressed="true"] { border-color: var(--star); color: var(--star); }
@@ -69,50 +70,78 @@ button[aria-pressed="true"] { border-color: var(--star); color: var(--star); }
 .primary:hover { filter: brightness(1.06); border-color: var(--star); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
-details[open] summary { margin-bottom: 10px; }
+details[open] summary { margin-bottom: 8px; }
 
-.stage { display: grid; gap: 16px; min-width: 0; }
+.stage { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; }
+.pwrap { min-height: 0; container-type: size; display: grid; place-items: center; }
 .poster-frame {
-  justify-self: center; width: 100%; max-width: 640px;
+  width: min(100cqw, 100cqh * 5 / 7);
   aspect-ratio: 5 / 7;
   border-radius: 4px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
-  overflow: hidden;
-  background: #0b1430;
+  box-shadow: 0 24px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
+  overflow: hidden; background: #0b1430;
 }
 #poster { width: 100%; height: 100%; display: block; }
-.timebar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; max-width: 640px; width: 100%; justify-self: center; }
-.timebar output { font: 500 13px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 9ch; text-align: right; }
+.timebar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; max-width: 560px; justify-self: center; }
+.timebar output { font: 500 12px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 9ch; text-align: right; }
 input[type="range"] { width: 100%; accent-color: var(--star); }
 
-.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-@media (max-width: 560px) { .facts { grid-template-columns: 1fr; } }
-.fact { padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; gap: 6px; align-content: start; min-width: 0; }
-.fact .k { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.fact .v { font: 400 26px/1.1 var(--display); color: var(--fg); text-wrap: balance; }
+.factsCol { display: grid; gap: 10px; align-content: start; }
+.facts { display: grid; gap: 10px; }
+.fact { padding: 13px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; gap: 4px; min-width: 0; }
+.fact .k { font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.fact .v { font: 400 22px/1.1 var(--display); text-wrap: balance; }
 .fact .v em { color: var(--star); font-style: italic; }
-.fact p { margin: 0; font-size: 14px; color: var(--muted); }
-.fact.hero { grid-column: 1 / -1; background: linear-gradient(120deg, #18213f, #0f1528 70%); border-color: #3a3f5c; }
-.fact.hero .v { font-size: clamp(26px, 3.4vw, 36px); }
-.note { font-size: 12px; color: var(--muted); }
+.fact p { margin: 0; font-size: 13px; color: var(--muted); }
+.fact.hero { background: linear-gradient(120deg, #18213f, #0f1528 70%); border-color: #3a3f5c; }
+.fact.hero .v { font-size: 28px; }
+.note { margin: 0; font-size: 11px; color: var(--muted); }
+.err { margin: 0; color: #f0a08a; font-size: 13px; }
+
+.tabs { display: none; }
 .toast {
   position: fixed; left: 50%; transform: translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 76px);
   background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 14px; font-size: 14px; max-width: min(92%, 440px); text-align: center;
+  padding: 10px 14px; font-size: 14px; max-width: min(92%, 440px); text-align: center; z-index: 5;
 }
-.err { color: #f0a08a; font-size: 13px; }
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+
+/* Medium screens: facts move under the form in one scrolling column. */
+@media (max-width: 1100px) and (min-width: 761px) {
+  .main { grid-template-columns: 320px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  #form { grid-column: 1; grid-row: 1 / span 2; }
+  .stage { grid-column: 2; grid-row: 1 / span 2; }
+  .factsCol { display: none; }
+  .main.with-facts #form { grid-row: 1; max-height: 58vh; }
+  .main.with-facts .factsCol { display: grid; grid-column: 1; grid-row: 2; }
+  .tabs { display: flex; justify-content: flex-start; }
+  .tabs [data-go="poster"] { display: none; }
+}
+/* Phones: one panel at a time, chosen from the tab bar. */
+@media (max-width: 760px) {
+  .app { padding-block: 10px 0; gap: 8px; }
+  .lede { display: none; }
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .main > [data-tab] { grid-column: 1; grid-row: 1; }
+  .main > [data-tab]:not(.on) { display: none; }
+  .tabs {
+    display: flex; gap: 6px;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: var(--surface); border-top: 1px solid var(--line);
+  }
+  .tabs button { flex: 1; padding: 11px 6px; }
+}
 </style>
 
-<div class="wrap" lang="tr">
-  <header>
+<div class="app" lang="tr">
+  <header class="bar">
     <h1>Doğduğun gecenin <em>gökyüzü</em></h1>
-    <p class="lede">Doğduğun an, doğduğun yerden başını kaldırsan neyi görürdün? 5.044 yıldız, Ay ve gezegenler o dakika için yeniden hesaplanıyor.</p>
+    <p class="lede">O dakika, o yerden başını kaldırsan neyi görürdün? 5.044 yıldız, Ay ve gezegenler yeniden hesaplanıyor.</p>
   </header>
 
-  <div class="grid">
-    <form class="panel" id="form" autocomplete="off">
+  <main class="main" id="main">
+    <form class="panel side" id="form" data-tab="form" autocomplete="off">
       <h2>Doğum bilgileri</h2>
       <div class="field">
         <label for="name">Adın</label>
@@ -131,15 +160,14 @@ input[type="range"] { width: 100%; accent-color: var(--star); }
       <div class="field">
         <label for="city">Şehir</label>
         <select id="city"></select>
-        <span class="hint">Listede yoksa en yakın büyük şehri seç ya da aşağıdan koordinat gir.</span>
       </div>
       <details id="customBox">
-        <summary>Koordinatı kendim gireceğim</summary>
+        <summary>Listede yok, koordinat gireceğim</summary>
         <div class="two">
           <div class="field"><label for="lat">Enlem</label><input type="number" id="lat" step="0.01" min="-90" max="90" placeholder="41.01"></div>
           <div class="field"><label for="lon">Boylam</label><input type="number" id="lon" step="0.01" min="-180" max="180" placeholder="28.98"></div>
         </div>
-        <div class="field" style="margin-top:12px"><label for="place">Yer adı</label><input type="text" id="place" maxlength="40" placeholder="Örn. Ayvalık"></div>
+        <div class="field" style="margin-top:10px"><label for="place">Yer adı</label><input type="text" id="place" maxlength="40" placeholder="Örn. Ayvalık"></div>
         <span class="hint">Saat dilimi seçili şehirden alınır.</span>
       </details>
       <div class="field">
@@ -158,17 +186,26 @@ input[type="range"] { width: 100%; accent-color: var(--star); }
       <p class="note" id="saveNote" hidden>Bu görünümde dosya indirilemiyor. Posterin ekran görüntüsünü alabilirsin.</p>
     </form>
 
-    <section class="stage" aria-label="Poster">
-      <div class="poster-frame"><canvas id="poster" role="img" aria-label="Doğum anındaki gökyüzü haritası"></canvas></div>
+    <section class="stage on" data-tab="poster" aria-label="Poster">
+      <div class="pwrap"><div class="poster-frame" id="frame"><canvas id="poster" role="img" aria-label="Doğum anındaki gökyüzü haritası"></canvas></div></div>
       <div class="timebar">
         <button type="button" id="play" aria-pressed="false">Geceyi oynat</button>
         <input type="range" id="shift" min="-720" max="720" step="1" value="0" aria-label="Saati kaydır">
         <output id="shiftOut" for="shift">doğum anı</output>
       </div>
-      <div class="facts" id="facts"></div>
-      <p class="note">Hesaplar tarayıcında yapılır, hiçbir bilgi bir yere gönderilmez. Yıldız verisi: d3-celestial (Olaf Frohn, BSD), Hipparcos kataloğundan. Gezegenler JPL yaklaşık yörünge elemanlarıyla, Ay Meeus serisiyle hesaplanır; hata 0,2°'nin altındadır.</p>
     </section>
-  </div>
+
+    <aside class="side factsCol" data-tab="facts" aria-label="O gecenin notları">
+      <div class="facts" id="facts"></div>
+      <p class="note">Hesaplar tarayıcında yapılır, hiçbir bilgi bir yere gönderilmez. Yıldızlar: d3-celestial (Olaf Frohn, BSD), Hipparcos kataloğu. Gezegenler JPL yaklaşık yörünge elemanlarıyla, Ay Meeus serisiyle hesaplanır; hata 0,2°'nin altındadır.</p>
+    </aside>
+  </main>
+
+  <nav class="tabs" id="tabs" aria-label="Bölümler">
+    <button type="button" data-go="poster" aria-pressed="true">Poster</button>
+    <button type="button" data-go="form" aria-pressed="false">Bilgilerin</button>
+    <button type="button" data-go="facts" aria-pressed="false">O gecenin notları</button>
+  </nav>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -809,10 +846,14 @@ function drawMoon(ctx, x, y, r, k, ang, T) {
 // ---------------------------------------------------------------- render loop
 const canvas = $('poster');
 function sizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
+  const rect = $('frame').getBoundingClientRect();
+  if (rect.width < 10) return false;
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const w = Math.max(300, Math.round(rect.width * dpr));
-  canvas.width = w; canvas.height = Math.round(w * 7 / 5);
+  const h = Math.round(w * 7 / 5);
+  if (canvas.width === w && canvas.height === h) return false;
+  canvas.width = w; canvas.height = h;
+  return true;
 }
 let lastSky = null, lastFacts = null, lastInfo = null;
 function render(fast) {
@@ -926,7 +967,18 @@ $('save').addEventListener('click', async () => {
   }, 'image/png');
 });
 
-addEventListener('resize', () => { sizeCanvas(); render(false); });
+// Tabs (phone) and the facts toggle (medium screens)
+const mainEl = $('main');
+function go(tab) {
+  const wide = matchMedia('(min-width: 761px)').matches;
+  if (wide) { mainEl.classList.toggle('with-facts', tab === 'facts' ? !mainEl.classList.contains('with-facts') : false); }
+  mainEl.querySelectorAll('[data-tab]').forEach(el => el.classList.toggle('on', el.dataset.tab === tab));
+  $('tabs').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(wide ? (b.dataset.go === 'facts' && mainEl.classList.contains('with-facts')) : b.dataset.go === tab)));
+  if (sizeCanvas()) render(false);
+}
+$('tabs').addEventListener('click', e => { const b = e.target.closest('button[data-go]'); if (b) go(b.dataset.go); });
+if (window.ResizeObserver) new ResizeObserver(() => { if (sizeCanvas()) render(false); }).observe($('frame'));
+else addEventListener('resize', () => { if (sizeCanvas()) render(false); });
 sizeCanvas();
 update();
 document.fonts?.ready.then(() => { fontsReady = true; render(false); });
