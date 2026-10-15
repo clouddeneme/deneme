@@ -1,0 +1,550 @@
+<title>Geri Besleme Ağı</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed GPU canvas, a TouchDesigner-style operator network strip and a floating parameter dialog. Single dark look by choice, like the TD editor. */
+:root {
+  color-scheme: dark;
+  --ground: #121214;
+  --panel: rgba(34, 34, 38, 0.88);
+  --panel-solid: #232327;
+  --line: #3a3a41;
+  --fg: #dcdce2;
+  --muted: #8d8d98;
+  --top: #8f74d4;          /* TOP family (texture operators) */
+  --top-dim: #4a3d73;
+  --live: #e3c35a;         /* viewer-active flag */
+  --display: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+html, body { height: 100%; }
+body {
+  background: var(--ground);
+  color: var(--fg);
+  font-family: var(--body);
+  overflow: hidden;
+}
+#gl {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: crosshair;
+}
+.hud {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  left: max(16px, env(safe-area-inset-left, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-wrap: wrap; gap: 12px 24px;
+  align-items: flex-start; justify-content: space-between;
+  pointer-events: none;
+}
+.hud > * { pointer-events: auto; }
+.title h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(22px, 3.2vw, 34px);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-shadow: 0 1px 12px rgba(0,0,0,.6);
+}
+.title p {
+  margin: 6px 0 0;
+  max-width: 42ch;
+  font-size: 13px;
+  color: var(--fg);
+  opacity: .78;
+  text-shadow: 0 1px 8px rgba(0,0,0,.8);
+}
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+button {
+  font: 500 12px/1 var(--mono);
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 8px 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+button:hover { border-color: var(--top); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--top-dim); border-color: var(--top); }
+
+/* Operator network strip */
+.network {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  display: flex; align-items: center; gap: 0;
+  max-width: calc(100% - 32px);
+  overflow-x: auto;
+  padding: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  backdrop-filter: blur(6px);
+}
+.op {
+  display: grid; gap: 4px; justify-items: start;
+  min-width: 84px;
+  padding: 6px 8px 7px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--top);
+  border-radius: 2px;
+  background: var(--panel-solid);
+  text-align: left;
+  backdrop-filter: none;
+}
+.op .fam { font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--top); }
+.op .nm { font: 500 12px/1 var(--mono); }
+.op[aria-pressed="true"] { background: var(--top-dim); }
+.op.out .fam::after { content: " ●"; color: var(--live); }
+.wire { width: 18px; height: 2px; background: var(--muted); flex: none; position: relative; }
+.wire::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, var(--live), transparent);
+  background-size: 200% 100%;
+  animation: flow 1.2s linear infinite;
+}
+@keyframes flow { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* Parameter dialog */
+.params {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  width: 300px;
+  max-height: calc(100% - 140px);
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+}
+.params header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.params header strong { font: 500 13px/1 var(--mono); }
+.params header span { font-size: 12px; color: var(--muted); }
+.plist { display: grid; gap: 10px; padding: 12px; }
+.prow { display: grid; grid-template-columns: 82px 1fr 52px; gap: 8px; align-items: center; }
+.prow label { font: 400 12px/1.2 var(--mono); color: var(--muted); text-align: right; }
+.prow output {
+  font: 400 12px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  background: #18181b;
+  border: 1px solid var(--line);
+  padding: 4px 5px;
+  text-align: right;
+}
+input[type="range"] { width: 100%; min-width: 0; accent-color: var(--top); }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { padding: 6px 8px; }
+.info dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font: 400 12px/1.3 var(--mono); }
+.info dt { color: var(--muted); }
+.info dd { margin: 0; font-variant-numeric: tabular-nums; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+.presets .lbl { width: 100%; font: 500 10px/1 var(--mono); letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+.fallback {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  text-align: center; color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .params {
+    left: max(16px, env(safe-area-inset-left, 0px));
+    width: auto;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
+    max-height: 42%;
+  }
+  .title p { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wire::after { animation: none; }
+}
+</style>
+
+<canvas id="gl" aria-label="Fare veya parmakla boyanabilen geri beslemeli akış görseli"></canvas>
+
+<div class="hud">
+  <div class="title">
+    <h1>Geri Besleme Ağı</h1>
+    <p>TouchDesigner'daki Noise → Feedback → Level zincirinin tarayıcıda, GPU'da çalışan hali. Ekranı sürükleyerek mürekkep ekle, alttaki operatörlere tıklayıp parametreleri değiştir.</p>
+  </div>
+  <div class="actions">
+    <button id="pause" type="button" aria-pressed="false" title="Boşluk tuşu">Durdur</button>
+    <button id="random" type="button" title="R tuşu">Rastgele</button>
+    <button id="clear" type="button" title="C tuşu">Temizle</button>
+    <button id="toggle" type="button" aria-expanded="true" aria-controls="params">Parametreler</button>
+  </div>
+</div>
+
+<nav class="network" id="network" aria-label="Operatör ağı"></nav>
+
+<section class="params" id="params" aria-live="polite">
+  <header><strong id="pTitle">feedback1</strong><span id="pDesc"></span></header>
+  <div class="plist" id="plist"></div>
+  <div class="presets" id="presets"><span class="lbl">Hazır ayarlar</span></div>
+</section>
+
+<script>
+(() => {
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- Operator definitions (names follow TouchDesigner conventions) ----------
+const OPS = [
+  { id: 'noise1', desc: 'Akış alanı', params: [
+    { k: 'period', label: 'Period', min: 0.5, max: 8, step: 0.01, v: 2.6 },
+    { k: 'speed', label: 'Speed', min: 0, max: 1, step: 0.01, v: reduced ? 0.05 : 0.18 },
+    { k: 'flow', label: 'Amplitude', min: 0, max: 3, step: 0.01, v: 1.2 },
+  ]},
+  { id: 'add1', desc: 'Mürekkep kaynağı', params: [
+    { k: 'emit', label: 'Emit', min: 0, max: 1, step: 0.01, v: 0.45 },
+    { k: 'brush', label: 'Brush', min: 0.01, max: 0.2, step: 0.001, v: 0.06 },
+  ]},
+  { id: 'feedback1', desc: 'Önceki kareyi geri besler', params: [
+    { k: 'disp', label: 'Displace', min: 0, max: 0.012, step: 0.0001, v: 0.004 },
+    { k: 'decay', label: 'Decay', min: 0.9, max: 0.999, step: 0.001, v: 0.985 },
+    { k: 'zoom', label: 'Zoom', min: -0.01, max: 0.02, step: 0.0001, v: 0.0025 },
+    { k: 'rot', label: 'Rotate', min: -0.02, max: 0.02, step: 0.0001, v: 0.002 },
+  ]},
+  { id: 'level1', desc: 'Renk ve ton', params: [
+    { k: 'bright', label: 'Brightness', min: 0.2, max: 4, step: 0.01, v: 1.4 },
+    { k: 'contrast', label: 'Gamma', min: 0.4, max: 2.5, step: 0.01, v: 1.1 },
+    { k: 'hue', label: 'Hue', min: 0, max: 1, step: 0.001, v: 0 },
+    { k: 'palette', label: 'Palette', type: 'seg', options: ['Fosfor', 'Kor', 'Buzul', 'Neon'], v: 0 },
+  ]},
+  { id: 'out1', desc: 'Çıkış bilgisi', info: true, params: [] },
+];
+const P = {};
+OPS.forEach(o => o.params.forEach(p => P[p.k] = p.v));
+const DEF = { ...P };
+
+const PRESETS = {
+  'Duman':   { period: 1.6, speed: 0.12, flow: 1.0, emit: 0.35, disp: 0.003, decay: 0.992, zoom: 0.0005, rot: 0.0, bright: 1.1, contrast: 1.3, palette: 2, hue: 0.1 },
+  'Plazma':  { period: 4.2, speed: 0.4, flow: 2.2, emit: 0.7, disp: 0.006, decay: 0.95, zoom: 0.0, rot: 0.0, bright: 2.2, contrast: 0.8, palette: 3, hue: 0.0 },
+  'Tünel':   { period: 2.6, speed: 0.18, flow: 0.6, emit: 0.5, disp: 0.002, decay: 0.975, zoom: 0.012, rot: 0.008, bright: 1.6, contrast: 1.0, palette: 0, hue: 0.4 },
+  'Mürekkep':{ period: 3.0, speed: 0.08, flow: 1.8, emit: 0.25, disp: 0.005, decay: 0.997, zoom: -0.001, rot: -0.001, bright: 1.0, contrast: 1.6, palette: 1, hue: 0.0 },
+};
+const PALETTES = [
+  [[.5,.5,.5],[.5,.5,.5],[1,1,1],[0,.33,.67]],
+  [[.55,.35,.25],[.45,.35,.25],[1,1,1],[0,.1,.2]],
+  [[.4,.5,.6],[.35,.4,.4],[1,1,.5],[.8,.9,.3]],
+  [[.5,.5,.5],[.5,.5,.5],[2,1,0],[.5,.2,.25]],
+];
+
+// ---------- WebGL setup ----------
+const canvas = document.getElementById('gl');
+const gl = canvas.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false });
+if (!gl) {
+  const d = document.createElement('div');
+  d.className = 'fallback';
+  d.textContent = 'Bu tarayıcı WebGL desteklemiyor, bu yüzden görsel çalıştırılamadı.';
+  document.body.appendChild(d);
+  return;
+}
+
+const VERT = `attribute vec2 aPos; varying vec2 vUv;
+void main(){ vUv = aPos*0.5+0.5; gl_Position = vec4(aPos,0.,1.); }`;
+
+const SIM = `precision highp float;
+varying vec2 vUv;
+uniform sampler2D uPrev;
+uniform float uTime, uAspect, uPeriod, uSpeed, uFlow, uDisp, uDecay, uZoom, uRot, uEmit, uBrush, uMax;
+uniform vec3 uPointer;
+uniform vec2 uPointerPrev;
+float hash(vec3 p){ p = fract(p*0.3183099+0.1); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
+float noise(vec3 x){
+  vec3 i = floor(x); vec3 f = fract(x); f = f*f*(3.0-2.0*f);
+  return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x), mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x), mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+}
+float fbm(vec3 p){ float a=0.5, s=0.0; for(int i=0;i<4;i++){ s+=a*noise(p); p*=2.03; a*=0.5; } return s; }
+float segDist(vec2 p, vec2 a, vec2 b){ vec2 pa=p-a, ba=b-a; float h=clamp(dot(pa,ba)/max(dot(ba,ba),1e-6),0.,1.); return length(pa-ba*h); }
+void main(){
+  vec2 c = vUv - 0.5; c.x *= uAspect;
+  vec3 np = vec3(c*uPeriod, uTime*uSpeed);
+  float e = 0.02;
+  float dy = fbm(np+vec3(0,e,0)) - fbm(np-vec3(0,e,0));
+  float dx = fbm(np+vec3(e,0,0)) - fbm(np-vec3(e,0,0));
+  vec2 curl = vec2(dy, -dx)/(2.0*e);
+  float cs = cos(uRot), sn = sin(uRot);
+  vec2 q = mat2(cs,-sn,sn,cs) * c * (1.0 - uZoom);
+  q -= curl * uDisp * uFlow;
+  q.x /= uAspect;
+  vec4 prev = texture2D(uPrev, q + 0.5);
+  float d = prev.r * uDecay;
+  vec2 hv = prev.gb*2.0-1.0;
+
+  float n = fbm(np*1.7 + vec3(13.1, 7.2, uTime*0.31));
+  float t = mix(0.86, 0.52, uEmit);
+  float add = smoothstep(t, t+0.05, n) * 0.05 * step(0.001, uEmit);
+  float ang = 6.28318*fract(uTime*0.04);
+  vec2 hNew = vec2(cos(ang), sin(ang));
+
+  vec2 pc = uPointer.xy - 0.5; pc.x *= uAspect;
+  vec2 pp = uPointerPrev - 0.5; pp.x *= uAspect;
+  float sd = segDist(c, pp, pc);
+  float pAdd = exp(-sd*sd/(uBrush*uBrush)) * uPointer.z * 0.35;
+  vec2 hPtr = vec2(cos(ang+3.14159), sin(ang+3.14159));
+
+  vec2 hv2 = hv*d + hNew*add + hPtr*pAdd;
+  d = min(d + add + pAdd, uMax);
+  float L = length(hv2);
+  hv2 = L > 1e-5 ? hv2/L : hv;
+  gl_FragColor = vec4(d, hv2*0.5+0.5, 1.0);
+}`;
+
+const DISP = `precision highp float;
+varying vec2 vUv;
+uniform sampler2D uTex;
+uniform float uBright, uContrast, uHue;
+uniform vec3 uA, uB, uC, uD;
+vec3 pal(float t){ return uA + uB*cos(6.28318*(uC*t+uD)); }
+void main(){
+  vec4 s = texture2D(uTex, vUv);
+  float d = s.r;
+  vec2 hv = s.gb*2.0-1.0;
+  float h = atan(hv.y, hv.x)/6.28318;
+  float v = 1.0 - exp(-d*uBright*2.2);
+  v = pow(max(v,0.0), uContrast);
+  vec3 col = pal(h + uHue + d*0.12) * v;
+  float vig = smoothstep(1.25, 0.35, length(vUv-0.5)*1.4);
+  col = col*vig + vec3(0.07,0.07,0.08)*(1.0-v)*0.35;
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+function shader(type, src){
+  const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+function program(fs){
+  const p = gl.createProgram();
+  gl.attachShader(p, shader(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(p, shader(gl.FRAGMENT_SHADER, fs));
+  gl.bindAttribLocation(p, 0, 'aPos');
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  const u = {};
+  const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < n; i++) { const a = gl.getActiveUniform(p, i); u[a.name] = gl.getUniformLocation(p, a.name); }
+  return { p, u };
+}
+const sim = program(SIM), disp = program(DISP);
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);
+gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+// Pick the best renderable texture format.
+const hf = gl.getExtension('OES_texture_half_float');
+gl.getExtension('EXT_color_buffer_half_float');
+const hfLinear = gl.getExtension('OES_texture_half_float_linear');
+function makeTarget(w, h, type, filter){
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, type, null);
+  const fb = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  return ok ? { tex, fb } : null;
+}
+let fmt = { type: gl.UNSIGNED_BYTE, filter: gl.LINEAR, name: '8-bit fixed (rgba8)', max: 1.0 };
+if (hf) {
+  const test = makeTarget(4, 4, hf.HALF_FLOAT_OES, hfLinear ? gl.LINEAR : gl.NEAREST);
+  if (test) fmt = { type: hf.HALF_FLOAT_OES, filter: hfLinear ? gl.LINEAR : gl.NEAREST, name: '16-bit float (rgba16f)', max: 3.0 };
+}
+
+let targets = [], cur = 0, simW = 0, simH = 0;
+function clearTargets(){
+  targets.forEach(t => { gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb); gl.clearColor(0, .5, .5, 1); gl.clear(gl.COLOR_BUFFER_BIT); });
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+}
+function resize(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(innerWidth * dpr)), h = Math.max(1, Math.round(innerHeight * dpr));
+  canvas.width = w; canvas.height = h;
+  const s = Math.min(1, 1024 / Math.max(w, h));
+  const nw = Math.round(w * s), nh = Math.round(h * s);
+  if (nw === simW && nh === simH) return;
+  targets.forEach(t => { gl.deleteTexture(t.tex); gl.deleteFramebuffer(t.fb); });
+  simW = nw; simH = nh;
+  targets = [makeTarget(simW, simH, fmt.type, fmt.filter), makeTarget(simW, simH, fmt.type, fmt.filter)];
+  clearTargets();
+  for (let i = 0; i < 90; i++) step();
+  renderInfo();
+}
+
+// ---------- Pointer ----------
+const ptr = { x: .5, y: .5, px: .5, py: .5, down: false };
+function setPtr(e){
+  const r = canvas.getBoundingClientRect();
+  ptr.x = (e.clientX - r.left) / r.width;
+  ptr.y = 1 - (e.clientY - r.top) / r.height;
+}
+canvas.addEventListener('pointerdown', e => { setPtr(e); ptr.px = ptr.x; ptr.py = ptr.y; ptr.down = true; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', e => { if (ptr.down) setPtr(e); });
+['pointerup', 'pointercancel'].forEach(t => canvas.addEventListener(t, () => { ptr.down = false; }));
+
+// ---------- Loop ----------
+let time = 0, paused = false;
+function step(){
+  const src = targets[cur], dst = targets[1 - cur];
+  gl.bindFramebuffer(gl.FRAMEBUFFER, dst.fb);
+  gl.viewport(0, 0, simW, simH);
+  gl.useProgram(sim.p);
+  const u = sim.u;
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, src.tex);
+  gl.uniform1i(u.uPrev, 0);
+  gl.uniform1f(u.uTime, time);
+  gl.uniform1f(u.uAspect, simW / simH);
+  gl.uniform1f(u.uPeriod, P.period); gl.uniform1f(u.uSpeed, P.speed); gl.uniform1f(u.uFlow, P.flow);
+  gl.uniform1f(u.uDisp, P.disp); gl.uniform1f(u.uDecay, P.decay); gl.uniform1f(u.uZoom, P.zoom);
+  gl.uniform1f(u.uRot, P.rot); gl.uniform1f(u.uEmit, P.emit); gl.uniform1f(u.uBrush, P.brush);
+  gl.uniform1f(u.uMax, fmt.max);
+  gl.uniform3f(u.uPointer, ptr.x, ptr.y, ptr.down ? 1 : 0);
+  gl.uniform2f(u.uPointerPrev, ptr.px, ptr.py);
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+  ptr.px = ptr.x; ptr.py = ptr.y;
+  cur = 1 - cur;
+  time += 1 / 60;
+}
+function draw(){
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.useProgram(disp.p);
+  const u = disp.u, pal = PALETTES[P.palette];
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, targets[cur].tex);
+  gl.uniform1i(u.uTex, 0);
+  gl.uniform1f(u.uBright, P.bright); gl.uniform1f(u.uContrast, P.contrast); gl.uniform1f(u.uHue, P.hue);
+  gl.uniform3fv(u.uA, pal[0]); gl.uniform3fv(u.uB, pal[1]); gl.uniform3fv(u.uC, pal[2]); gl.uniform3fv(u.uD, pal[3]);
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+let last = performance.now(), acc = 0, frames = 0, fpsT = last, fps = 0;
+function frame(now){
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (!paused || ptr.down) {
+    acc += dt;
+    let n = 0;
+    while (acc >= 1 / 60 && n < 3) { step(); acc -= 1 / 60; n++; }
+    if (n === 3) acc = 0;
+  }
+  draw();
+  frames++;
+  if (now - fpsT > 500) { fps = Math.round(frames * 1000 / (now - fpsT)); frames = 0; fpsT = now; renderInfo(); }
+  requestAnimationFrame(frame);
+}
+
+// ---------- UI ----------
+const net = document.getElementById('network');
+const plist = document.getElementById('plist');
+let selected = 'feedback1';
+OPS.forEach((o, i) => {
+  if (i) { const w = document.createElement('span'); w.className = 'wire'; w.setAttribute('aria-hidden', 'true'); net.appendChild(w); }
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'op' + (o.info ? ' out' : ''); b.dataset.id = o.id;
+  b.innerHTML = `<span class="fam">TOP</span><span class="nm">${o.id}</span>`;
+  b.addEventListener('click', () => select(o.id));
+  net.appendChild(b);
+});
+function fmtVal(p, v){
+  const dec = p.step < 0.001 ? 4 : p.step < 0.01 ? 3 : 2;
+  return Number(v).toFixed(dec);
+}
+function select(id){
+  selected = id;
+  net.querySelectorAll('.op').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  const o = OPS.find(x => x.id === id);
+  document.getElementById('pTitle').textContent = o.id;
+  document.getElementById('pDesc').textContent = o.desc;
+  plist.innerHTML = '';
+  if (o.info) { plist.className = 'plist info'; renderInfo(); return; }
+  plist.className = 'plist';
+  o.params.forEach(p => {
+    const row = document.createElement('div'); row.className = 'prow';
+    const id = `p-${p.k}`;
+    if (p.type === 'seg') {
+      row.innerHTML = `<label>${p.label}</label>`;
+      const seg = document.createElement('div'); seg.className = 'seg'; seg.style.gridColumn = 'span 2';
+      p.options.forEach((name, i) => {
+        const b = document.createElement('button'); b.type = 'button'; b.id = `${id}-${i}`; b.textContent = name;
+        b.setAttribute('aria-pressed', String(P[p.k] === i));
+        b.addEventListener('click', () => { P[p.k] = i; seg.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', String(j === i))); });
+        seg.appendChild(b);
+      });
+      row.appendChild(seg);
+    } else {
+      row.innerHTML = `<label for="${id}">${p.label}</label><input type="range" id="${id}" min="${p.min}" max="${p.max}" step="${p.step}" value="${P[p.k]}"><output for="${id}">${fmtVal(p, P[p.k])}</output>`;
+      const inp = row.querySelector('input'), out = row.querySelector('output');
+      inp.addEventListener('input', () => { P[p.k] = parseFloat(inp.value); out.textContent = fmtVal(p, P[p.k]); });
+    }
+    plist.appendChild(row);
+  });
+}
+function renderInfo(){
+  if (selected !== 'out1') return;
+  plist.innerHTML = `<dl>
+    <dt>Resolution</dt><dd>${simW} × ${simH}</dd>
+    <dt>Display</dt><dd>${canvas.width} × ${canvas.height}</dd>
+    <dt>Pixel format</dt><dd>${fmt.name}</dd>
+    <dt>Cook rate</dt><dd>${paused ? 'paused' : fps + ' fps'}</dd>
+    <dt>Frame</dt><dd>${Math.round(time * 60)}</dd>
+  </dl>`;
+}
+function apply(vals){ Object.assign(P, vals); select(selected); }
+
+const presets = document.getElementById('presets');
+Object.keys(PRESETS).forEach(name => {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = name;
+  b.addEventListener('click', () => apply(PRESETS[name]));
+  presets.appendChild(b);
+});
+const def = document.createElement('button'); def.type = 'button'; def.textContent = 'Varsayılan';
+def.addEventListener('click', () => apply(DEF));
+presets.appendChild(def);
+
+function randomize(){
+  const r = (a, b) => a + Math.random() * (b - a);
+  apply({ period: r(1, 6), speed: r(0.05, reduced ? 0.1 : 0.5), flow: r(0.4, 2.5), emit: r(0.2, 0.8),
+          disp: r(0.001, 0.008), decay: r(0.95, 0.996), zoom: r(-0.004, 0.012), rot: r(-0.008, 0.008),
+          bright: r(0.9, 2.4), contrast: r(0.7, 1.6), hue: Math.random(), palette: Math.floor(Math.random() * 4) });
+}
+const pauseBtn = document.getElementById('pause');
+function togglePause(){ paused = !paused; pauseBtn.setAttribute('aria-pressed', String(paused)); pauseBtn.textContent = paused ? 'Devam' : 'Durdur'; renderInfo(); }
+pauseBtn.addEventListener('click', togglePause);
+document.getElementById('random').addEventListener('click', randomize);
+document.getElementById('clear').addEventListener('click', clearTargets);
+const toggle = document.getElementById('toggle'), panel = document.getElementById('params');
+toggle.addEventListener('click', () => { panel.hidden = !panel.hidden; toggle.setAttribute('aria-expanded', String(!panel.hidden)); });
+addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('input')) return;
+  if (e.key === ' ') { e.preventDefault(); togglePause(); }
+  else if (e.key === 'r' || e.key === 'R') randomize();
+  else if (e.key === 'c' || e.key === 'C') clearTargets();
+});
+if (innerWidth < 720) { panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); }
+
+addEventListener('resize', resize);
+select(selected);
+resize();
+requestAnimationFrame(frame);
+})();
+</script>
