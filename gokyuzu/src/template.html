@@ -743,7 +743,14 @@ function fallbackCopy(text) {
 // Poster download through the viewer's save dialog.
 let downloads = null;
 (async () => {
-  try { downloads = window.claude?.use ? await window.claude.use('downloads') : null; } catch { downloads = null; }
+  const inClaude = !!window.claude?.use;
+  try { downloads = inClaude ? await window.claude.use('downloads') : null; } catch { downloads = null; }
+  // Outside claude.ai (e.g. GitHub Pages) a plain browser download works.
+  if (!inClaude) downloads = { save: ({ filename, data }) => new Promise(res => {
+    const url = URL.createObjectURL(data), a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000); res({ status: 'saved' });
+  }) };
   $('save').hidden = !downloads; $('saveNote').hidden = !!downloads;
 })();
 $('save').addEventListener('click', async () => {
@@ -753,7 +760,8 @@ $('save').addEventListener('click', async () => {
   drawPoster(off.getContext('2d'), off.width, off.height, lastInfo || model.info, A.sky(new Date(ms), model.info.lat, model.info.lon), model.facts, st.theme, { fast: false });
   off.toBlob(async blob => {
     if (!blob) { toast('Poster oluşturulamadı.'); return; }
-    const base = (st.name || 'gokyuzu').toLocaleLowerCase('tr-TR').replace(/[^a-z0-9çğıöşü]+/g, '-').replace(/^-|-$/g, '') || 'gokyuzu';
+    const ascii = { ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u', â: 'a', î: 'i', û: 'u' };
+    const base = (st.name || 'gokyuzu').toLocaleLowerCase('tr-TR').replace(/[çğıöşüâîû]/g, c => ascii[c]).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'gokyuzu';
     try { await downloads.save({ filename: `${base}-${model.info.y}.png`, data: blob }); toast('Poster kaydedildi.'); }
     catch (e) {
       if (e?.code === 'declined') return;
