@@ -9,7 +9,7 @@ const path = require('path');
   const errs = [];
   pg.on('console', m => { if (['error', 'warning'].includes(m.type())) errs.push(m.type() + ': ' + m.text()); });
   pg.on('pageerror', e => { errs.push('pageerror: ' + e); console.log('pageerror: ' + e); process.exit(1); });
-  await pg.goto('http://127.0.0.1:8123/29ekim/src/index.html');
+  await pg.goto('http://127.0.0.1:8123/29ekim/' + (process.env.PAGE || 'src') + '/index.html');
   await pg.waitForFunction(() => window.ready || window.initError, null, { timeout: 180000 });
   const ie = await pg.evaluate(() => window.initError);
   if (ie) { console.log('INIT ERROR', ie); process.exit(1); }

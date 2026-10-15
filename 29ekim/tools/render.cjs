@@ -9,7 +9,7 @@ const fs = require('fs'), path = require('path');
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const pg = await b.newPage({ viewport: { width: 1920, height: 1080 } });
   pg.on('pageerror', e => { console.log('pageerror', e); process.exit(1); });
-  await pg.goto('http://127.0.0.1:8123/29ekim/src/index.html');
+  await pg.goto('http://127.0.0.1:8123/29ekim/' + (process.env.PAGE || 'src') + '/index.html');
   await pg.waitForFunction(() => window.ready, null, { timeout: 300000 });
   for (let s0 = 0; s0 < total; s0 += SEG) {
     const file = path.join(dir, `seg${String(s0 / SEG).padStart(2, '0')}.mp4`);

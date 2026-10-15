@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Sıfırdan v2 · 29 Ekim</title>
+<style>
+@font-face { font-family: "Cormorant"; src: url("../fonts/CormorantGaramond.ttf"); font-weight: 300 700; }
+@font-face { font-family: "Cormorant"; src: url("../fonts/CormorantGaramond-Italic.ttf"); font-weight: 300 700; font-style: italic; }
+@font-face { font-family: "Bodoni"; src: url("../fonts/BodoniModa.ttf"); font-weight: 400 900; }
+@font-face { font-family: "Plex Mono"; src: url("../fonts/IBMPlexMono-Regular.ttf"); }
+@font-face { font-family: "Manrope"; src: url("../fonts/Manrope.ttf"); font-weight: 200 800; }
+html, body { margin: 0; background: #000; overflow: hidden; }
+canvas { display: block; }
+#hud { position: fixed; left: 8px; top: 8px; color: #888; font: 12px monospace; z-index: 2; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "../node_modules/three/build/three.module.js",
+  "three/addons/": "../node_modules/three/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="hud"></div>
+<script type="module" src="./main.js"></script>
+</body>
+</html>

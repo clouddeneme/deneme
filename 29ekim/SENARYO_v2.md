@@ -203,7 +203,7 @@ Bütün video **hiç durmayan tek bir kamera yolu**. Kamera hiçbir yerde tam du
 
 | # | Geçiş | Süre | Hareket | Nasıl bağlanıyor |
 |---|---|---|---|---|
-| G1 | İmleç → kor | 0:03,5–0:04,5 | **İçinden geçiş (push-through)** | Kamera hızlanarak `1923`'teki **0**'ın içine dalıyor. Rakamlar o anda kora dönüşüyor, kamera kıvılcımların arasından çıkıyor. |
+| G1 | İmleç → kor | 0:03,5–0:04,5 | **İçinden geçiş (push-through)** | Kamera hızlanarak `29.10`'daki **0**'ın, yani Ekim'in sıfırının içine dalıyor: video gerçekten "sıfırdan" başlıyor. Rakamlar o anda kora dönüşüyor, kamera kıvılcımların arasından çıkıyor. |
 | G2 | Kor → harita | 0:04,5–0:08,0 | **Takip + 90° pike** | Kamera bir "kahraman kor"u takip ediyor. Kor düşerken kamera aşağı dönüyor. Kor **Kocaeli'ye** düşüyor ve kıyı çizgisi oradan başlayarak bütün ülkeye yanıyor. Kamera yere yaklaşırken yatay uçuşa geçiyor. |
 | G3 | Kocaeli → Ankara | 0:09,6–0:10,4 | **Yatış + tırmanış** | Körfezden çıkarken kamera sola yatıp doğuya dönüyor. Ufukta Ankara'nın ışığı beliriyor. |
 | G4 | Ankara → harfler | 0:11,6–0:12,4 | **Yukarı bakış (tilt-up)** | Işık dalgası kameranın altından geçerken kamera yukarı bakıyor. Haritadan havalanan harfler kadraja giriyor ve kamera doğrudan onlara uçuyor. |
