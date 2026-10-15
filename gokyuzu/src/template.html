@@ -1,0 +1,731 @@
+<title>Doğduğun Gecenin Gökyüzü</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap">
+<style>
+/* Layout: an observatory desk; form on the left, the printed chart on the right, the night's facts beneath. One deliberate night palette. */
+:root {
+  color-scheme: dark;
+  --ground: #070b18;
+  --surface: #0f1528;
+  --surface-2: #151d36;
+  --line: #26304f;
+  --fg: #e9e6dc;
+  --muted: #9097ad;
+  --star: #f3d9a4;        /* warm starlight accent */
+  --star-dim: #6f5f3e;
+  --display: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: radial-gradient(1200px 700px at 70% -10%, #122042 0%, transparent 60%), var(--ground);
+  background-color: var(--ground);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100%;
+}
+.wrap {
+  max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+header { display: grid; gap: 6px; margin-bottom: 24px; }
+h1 { margin: 0; font: 400 clamp(34px, 5vw, 58px)/1.02 var(--display); letter-spacing: -0.01em; text-wrap: balance; }
+h1 em { color: var(--star); }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); }
+.grid { display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+.panel { display: grid; gap: 16px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.panel h2 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label, .lbl { font-size: 13px; font-weight: 500; }
+.hint { font-size: 12px; color: var(--muted); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+  width: 100%; min-width: 0;
+  font: 500 15px/1.2 var(--body); color: var(--fg);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
+  padding: 10px 11px;
+}
+textarea { resize: vertical; min-height: 56px; line-height: 1.4; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
+.themes { display: flex; flex-wrap: wrap; gap: 8px; }
+button {
+  font: 600 13px/1 var(--body); color: var(--fg);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
+  padding: 10px 12px; cursor: pointer;
+}
+button:hover { border-color: var(--star-dim); }
+button[aria-pressed="true"] { border-color: var(--star); color: var(--star); }
+.primary { background: var(--star); color: #1a1408; border-color: var(--star); }
+.primary:hover { filter: brightness(1.06); border-color: var(--star); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+details[open] summary { margin-bottom: 10px; }
+
+.stage { display: grid; gap: 16px; min-width: 0; }
+.poster-frame {
+  justify-self: center; width: 100%; max-width: 640px;
+  aspect-ratio: 5 / 7;
+  border-radius: 4px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
+  overflow: hidden;
+  background: #0b1430;
+}
+#poster { width: 100%; height: 100%; display: block; }
+.timebar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; max-width: 640px; width: 100%; justify-self: center; }
+.timebar output { font: 500 13px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 9ch; text-align: right; }
+input[type="range"] { width: 100%; accent-color: var(--star); }
+
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 560px) { .facts { grid-template-columns: 1fr; } }
+.fact { padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.fact .k { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.fact .v { font: 400 26px/1.1 var(--display); color: var(--fg); text-wrap: balance; }
+.fact .v em { color: var(--star); font-style: italic; }
+.fact p { margin: 0; font-size: 14px; color: var(--muted); }
+.fact.hero { grid-column: 1 / -1; background: linear-gradient(120deg, #18213f, #0f1528 70%); border-color: #3a3f5c; }
+.fact.hero .v { font-size: clamp(26px, 3.4vw, 36px); }
+.note { font-size: 12px; color: var(--muted); }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 14px; font-size: 14px; max-width: min(92%, 440px); text-align: center;
+}
+.err { color: #f0a08a; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap" lang="tr">
+  <header>
+    <h1>Doğduğun gecenin <em>gökyüzü</em></h1>
+    <p class="lede">Doğduğun an, doğduğun yerden başını kaldırsan neyi görürdün? 5.044 yıldız, Ay ve gezegenler o dakika için yeniden hesaplanıyor.</p>
+  </header>
+
+  <div class="grid">
+    <form class="panel" id="form" autocomplete="off">
+      <h2>Doğum bilgileri</h2>
+      <div class="field">
+        <label for="name">Adın</label>
+        <input type="text" id="name" maxlength="40" placeholder="Posterde başlık olur (isteğe bağlı)">
+      </div>
+      <div class="two">
+        <div class="field">
+          <label for="date">Tarih</label>
+          <input type="date" id="date" min="1900-01-01" max="2049-12-31" required>
+        </div>
+        <div class="field">
+          <label for="time">Saat</label>
+          <input type="time" id="time">
+        </div>
+      </div>
+      <div class="field">
+        <label for="city">Şehir</label>
+        <select id="city"></select>
+        <span class="hint">Listede yoksa en yakın büyük şehri seç ya da aşağıdan koordinat gir.</span>
+      </div>
+      <details id="customBox">
+        <summary>Koordinatı kendim gireceğim</summary>
+        <div class="two">
+          <div class="field"><label for="lat">Enlem</label><input type="number" id="lat" step="0.01" min="-90" max="90" placeholder="41.01"></div>
+          <div class="field"><label for="lon">Boylam</label><input type="number" id="lon" step="0.01" min="-180" max="180" placeholder="28.98"></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label for="place">Yer adı</label><input type="text" id="place" maxlength="40" placeholder="Örn. Ayvalık"></div>
+        <span class="hint">Saat dilimi seçili şehirden alınır.</span>
+      </details>
+      <div class="field">
+        <label for="msg">Posterin altına bir not</label>
+        <textarea id="msg" maxlength="90" placeholder="Örn. Her şey burada başladı."></textarea>
+      </div>
+      <div class="field">
+        <span class="lbl">Poster stili</span>
+        <div class="themes" id="themes"></div>
+      </div>
+      <p class="err" id="err" hidden></p>
+      <div class="actions">
+        <button type="button" class="primary" id="save" hidden>Posteri indir</button>
+        <button type="button" id="copy">Paylaşım metnini kopyala</button>
+      </div>
+      <p class="note" id="saveNote" hidden>Bu görünümde dosya indirilemiyor. Posterin ekran görüntüsünü alabilirsin.</p>
+    </form>
+
+    <section class="stage" aria-label="Poster">
+      <div class="poster-frame"><canvas id="poster" role="img" aria-label="Doğum anındaki gökyüzü haritası"></canvas></div>
+      <div class="timebar">
+        <button type="button" id="play" aria-pressed="false">Geceyi oynat</button>
+        <input type="range" id="shift" min="-720" max="720" step="1" value="0" aria-label="Saati kaydır">
+        <output id="shiftOut" for="shift">doğum anı</output>
+      </div>
+      <div class="facts" id="facts"></div>
+      <p class="note">Hesaplar tarayıcında yapılır, hiçbir bilgi bir yere gönderilmez. Yıldız verisi: d3-celestial (Olaf Frohn, BSD), Hipparcos kataloğundan. Gezegenler JPL yaklaşık yörünge elemanlarıyla, Ay Meeus serisiyle hesaplanır; hata 0,2°'nin altındadır.</p>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/*ASTRO*/
+</script>
+<script>
+(() => {
+const DATA = /*DATA*/null;
+const A = window.ASTRO;
+const D2R = Math.PI / 180;
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------- reference data
+const CITIES = [
+  ['İstanbul', 41.01, 28.98, 'Europe/Istanbul'], ['Ankara', 39.93, 32.86, 'Europe/Istanbul'], ['İzmir', 38.42, 27.14, 'Europe/Istanbul'],
+  ['Adana', 37.00, 35.32, 'Europe/Istanbul'], ['Antalya', 36.90, 30.70, 'Europe/Istanbul'], ['Aydın', 37.85, 27.85, 'Europe/Istanbul'],
+  ['Balıkesir', 39.65, 27.88, 'Europe/Istanbul'], ['Bodrum', 37.04, 27.43, 'Europe/Istanbul'], ['Bursa', 40.19, 29.06, 'Europe/Istanbul'],
+  ['Çanakkale', 40.15, 26.41, 'Europe/Istanbul'], ['Denizli', 37.78, 29.09, 'Europe/Istanbul'], ['Diyarbakır', 37.91, 40.24, 'Europe/Istanbul'],
+  ['Edirne', 41.68, 26.56, 'Europe/Istanbul'], ['Elazığ', 38.67, 39.22, 'Europe/Istanbul'], ['Erzurum', 39.90, 41.27, 'Europe/Istanbul'],
+  ['Eskişehir', 39.78, 30.52, 'Europe/Istanbul'], ['Gaziantep', 37.07, 37.38, 'Europe/Istanbul'], ['Hatay', 36.20, 36.16, 'Europe/Istanbul'],
+  ['Kahramanmaraş', 37.58, 36.94, 'Europe/Istanbul'], ['Kayseri', 38.73, 35.49, 'Europe/Istanbul'], ['Kocaeli', 40.77, 29.92, 'Europe/Istanbul'],
+  ['Konya', 37.87, 32.48, 'Europe/Istanbul'], ['Malatya', 38.35, 38.31, 'Europe/Istanbul'], ['Manisa', 38.61, 27.43, 'Europe/Istanbul'],
+  ['Mardin', 37.31, 40.74, 'Europe/Istanbul'], ['Mersin', 36.80, 34.63, 'Europe/Istanbul'], ['Muğla', 37.22, 28.36, 'Europe/Istanbul'],
+  ['Nevşehir', 38.62, 34.71, 'Europe/Istanbul'], ['Ordu', 40.98, 37.88, 'Europe/Istanbul'], ['Rize', 41.02, 40.52, 'Europe/Istanbul'],
+  ['Sakarya', 40.78, 30.40, 'Europe/Istanbul'], ['Samsun', 41.29, 36.33, 'Europe/Istanbul'], ['Sivas', 39.75, 37.02, 'Europe/Istanbul'],
+  ['Şanlıurfa', 37.16, 38.79, 'Europe/Istanbul'], ['Tekirdağ', 40.98, 27.51, 'Europe/Istanbul'], ['Trabzon', 41.00, 39.72, 'Europe/Istanbul'],
+  ['Van', 38.49, 43.38, 'Europe/Istanbul'], ['Zonguldak', 41.45, 31.79, 'Europe/Istanbul'],
+  ['Lefkoşa', 35.19, 33.36, 'Asia/Nicosia'], ['Bakü', 40.41, 49.87, 'Asia/Baku'], ['Tiflis', 41.72, 44.79, 'Asia/Tbilisi'],
+  ['Amsterdam', 52.37, 4.90, 'Europe/Amsterdam'], ['Atina', 37.98, 23.73, 'Europe/Athens'], ['Berlin', 52.52, 13.40, 'Europe/Berlin'],
+  ['Brüksel', 50.85, 4.35, 'Europe/Brussels'], ['Dubai', 25.20, 55.27, 'Asia/Dubai'], ['Frankfurt', 50.11, 8.68, 'Europe/Berlin'],
+  ['Kahire', 30.04, 31.24, 'Africa/Cairo'], ['Köln', 50.94, 6.96, 'Europe/Berlin'], ['Londra', 51.51, -0.13, 'Europe/London'],
+  ['Los Angeles', 34.05, -118.24, 'America/Los_Angeles'], ['Madrid', 40.42, -3.70, 'Europe/Madrid'], ['Moskova', 55.76, 37.62, 'Europe/Moscow'],
+  ['Münih', 48.14, 11.58, 'Europe/Berlin'], ['New York', 40.71, -74.01, 'America/New_York'], ['Paris', 48.86, 2.35, 'Europe/Paris'],
+  ['Roma', 41.90, 12.50, 'Europe/Rome'], ['Seul', 37.57, 126.98, 'Asia/Seoul'], ['Stockholm', 59.33, 18.07, 'Europe/Stockholm'],
+  ['Stuttgart', 48.78, 9.18, 'Europe/Berlin'], ['Sydney', -33.87, 151.21, 'Australia/Sydney'], ['Tahran', 35.69, 51.39, 'Asia/Tehran'],
+  ['Tokyo', 35.68, 139.69, 'Asia/Tokyo'], ['Toronto', 43.65, -79.38, 'America/Toronto'], ['Viyana', 48.21, 16.37, 'Europe/Vienna'],
+  ['Zürih', 47.38, 8.54, 'Europe/Zurich'],
+];
+const PLANET_TR = { mercury: 'Merkür', venus: 'Venüs', mars: 'Mars', jupiter: 'Jüpiter', saturn: 'Satürn', uranus: 'Uranüs', neptune: 'Neptün' };
+const PLANET_COLOR = { mercury: '#cdbfae', venus: '#fff3cf', mars: '#ff9a6b', jupiter: '#f5d7a8', saturn: '#e9d48f', uranus: '#a9e3e8', neptune: '#8fb1ff' };
+const SIGNS = ['Koç', 'Boğa', 'İkizler', 'Yengeç', 'Aslan', 'Başak', 'Terazi', 'Akrep', 'Yay', 'Oğlak', 'Kova', 'Balık'];
+const SIGN_CONS = ['Ari', 'Tau', 'Gem', 'Cnc', 'Leo', 'Vir', 'Lib', 'Sco', 'Sgr', 'Cap', 'Aqr', 'Psc'];
+const STAR_TR = { 'Polaris': 'Kutup Yıldızı', 'Rigil Kentaurus': 'Alfa Erboğa' };
+// Approximate distances in light years (Hipparcos / Gaia), for the "light that left when you were born" fact.
+const LIGHT = [
+  ['Rigil Kentaurus', 4.37], ['Sirius', 8.6], ['Procyon', 11.5], ['Altair', 16.7], ['Vega', 25.0], ['Fomalhaut', 25.1],
+  ['Pollux', 33.8], ['Denebola', 35.9], ['Arcturus', 36.7], ['Muphrid', 37.2], ['Porrima', 38.1], ['Capella', 42.9],
+  ['Errai', 45.0], ['Rasalhague', 48.6], ['Alderamin', 49.0], ['Castor', 51.0], ['Caph', 54.7], ['Zosma', 58.4],
+  ['Sheratan', 59.6], ['Aldebaran', 65.3], ['Hamal', 65.8], ['Unukalhai', 74.0], ['Alphecca', 75.0], ['Zubenelgenubi', 75.8],
+  ['Regulus', 79.3], ['Merak', 79.7], ['Menkalinan', 81.1], ['Alioth', 82.6], ['Mizar', 82.9], ['Phecda', 83.2],
+  ['Gacrux', 88.6], ['Algol', 90.0], ['Diphda', 96.3], ['Alpheratz', 97.0], ['Alkaid', 104], ['Vindemiatrix', 110],
+  ['Dubhe', 123], ['Kochab', 131], ['Achernar', 139],
+].filter(([n]) => n in DATA.named);
+const MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+const DAYS = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+
+const THEMES = {
+  gece: { label: 'Gece', bg: '#0b1430', sky0: '#14234b', sky1: '#08102a', ink: '#efe9da', faint: 'rgba(239,233,218,.55)', line: 'rgba(214,224,255,.34)',
+          mw: 'rgba(190,205,255,', ring: 'rgba(239,233,218,.55)', accent: '#f3d9a4', starMode: 'light' },
+  murekkep: { label: 'Mürekkep', bg: '#0a0a0b', sky0: '#121214', sky1: '#060607', ink: '#e8d6a8', faint: 'rgba(232,214,168,.55)', line: 'rgba(232,214,168,.32)',
+          mw: 'rgba(232,214,168,', ring: 'rgba(232,214,168,.6)', accent: '#e8c071', starMode: 'gold' },
+  kagit: { label: 'Kâğıt', bg: '#f1ece1', sky0: '#f7f3ea', sky1: '#ebe4d4', ink: '#1d2333', faint: 'rgba(29,35,51,.6)', line: 'rgba(29,35,51,.35)',
+          mw: 'rgba(60,70,110,', ring: 'rgba(29,35,51,.65)', accent: '#8a5a17', starMode: 'dark' },
+};
+
+// ---------------------------------------------------------------- time zones
+function tzOffsetMs(ms, tz) {
+  const f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const p = Object.fromEntries(f.formatToParts(new Date(ms)).map(x => [x.type, x.value]));
+  return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second) - ms;
+}
+function zonedToUtc(y, mo, d, h, mi, tz) {
+  const wall = Date.UTC(y, mo - 1, d, h, mi);
+  let ms = wall - tzOffsetMs(wall, tz);
+  ms = wall - tzOffsetMs(ms, tz);
+  return ms;
+}
+function fmtOffset(ms, tz) {
+  const o = Math.round(tzOffsetMs(ms, tz) / 60000), s = o < 0 ? '−' : '+', a = Math.abs(o);
+  return `UTC${s}${Math.floor(a / 60)}${a % 60 ? ':' + String(a % 60).padStart(2, '0') : ''}`;
+}
+function wallClock(ms, tz) {
+  const f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', weekday: 'short' });
+  const p = Object.fromEntries(f.formatToParts(new Date(ms)).map(x => [x.type, x.value]));
+  const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday);
+  return { y: +p.year, mo: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute, wd };
+}
+
+// ---------------------------------------------------------------- star colors
+const BV_STOPS = [[-0.4, [155, 176, 255]], [0, [202, 215, 255]], [0.3, [248, 247, 255]], [0.6, [255, 244, 232]], [1.0, [255, 225, 185]], [1.5, [255, 205, 150]], [2.0, [255, 185, 110]]];
+function bvColor(bv) {
+  if (bv <= BV_STOPS[0][0]) return BV_STOPS[0][1];
+  for (let i = 1; i < BV_STOPS.length; i++) {
+    if (bv <= BV_STOPS[i][0]) {
+      const [b0, c0] = BV_STOPS[i - 1], [b1, c1] = BV_STOPS[i], t = (bv - b0) / (b1 - b0);
+      return c0.map((c, k) => Math.round(c + (c1[k] - c) * t));
+    }
+  }
+  return BV_STOPS[BV_STOPS.length - 1][1];
+}
+
+// ---------------------------------------------------------------- state
+const st = { name: '', date: '', time: '', city: 0, lat: null, lon: null, place: '', msg: '', theme: 'gece', shift: 0 };
+let model = null;   // computed for the birth instant
+let fontsReady = false;
+
+function readForm() {
+  st.name = $('name').value.trim();
+  st.date = $('date').value;
+  st.time = $('time').value;
+  st.city = +$('city').value;
+  const la = parseFloat($('lat').value), lo = parseFloat($('lon').value);
+  const custom = $('customBox').open && isFinite(la) && isFinite(lo) && Math.abs(la) <= 90 && Math.abs(lo) <= 180;
+  st.lat = custom ? la : null; st.lon = custom ? lo : null;
+  st.place = custom ? $('place').value.trim() : '';
+  st.msg = $('msg').value.trim();
+}
+
+function compute() {
+  const err = $('err');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(st.date)) { err.textContent = 'Bir doğum tarihi seç.'; err.hidden = false; return null; }
+  const [y, mo, d] = st.date.split('-').map(Number);
+  if (y < 1900 || y > 2049) { err.textContent = 'Tarih 1900 ile 2049 arasında olmalı. Gezegen hesapları bu aralıkta güvenilir.'; err.hidden = false; return null; }
+  err.hidden = true;
+  const timeKnown = /^\d{2}:\d{2}$/.test(st.time);
+  const [h, mi] = timeKnown ? st.time.split(':').map(Number) : [0, 0];
+  const c = CITIES[st.city];
+  const lat = st.lat ?? c[1], lon = st.lon ?? c[2], tz = c[3];
+  const place = st.lat != null ? (st.place || 'Özel konum') : c[0];
+  const utc = zonedToUtc(y, mo, d, h, mi, tz);
+  return { y, mo, d, h, mi, timeKnown, lat, lon, tz, place, utc, offset: fmtOffset(utc, tz) };
+}
+
+// ---------------------------------------------------------------- facts
+function phaseName(m) {
+  const k = m.illum;
+  if (k < 0.03) return 'Yeni Ay';
+  if (k > 0.97) return 'Dolunay';
+  if (k < 0.4) return m.waxing ? 'Büyüyen hilal' : 'Küçülen hilal';
+  if (k < 0.6) return m.waxing ? 'İlk dördün' : 'Son dördün';
+  return m.waxing ? 'Büyüyen şişkin Ay' : 'Küçülen şişkin Ay';
+}
+function consName(id) { return id && DATA.cons[id] ? DATA.cons[id].tr : '—'; }
+function sunSign(sky) {
+  const s = sky.bodies.sun, eps = 23.4393 - 0.013 * sky.T;
+  const lon = A.norm360(Math.atan2(Math.sin(s.ra * D2R) * Math.cos(eps * D2R) + Math.tan(s.dec * D2R) * Math.sin(eps * D2R), Math.cos(s.ra * D2R)) / D2R);
+  return Math.floor(lon / 30) % 12;
+}
+function buildFacts(info, sky) {
+  const b = sky.bodies;
+  const sunCons = A.constellationAt(b.sun.j2000.ra, b.sun.j2000.dec, DATA.bounds);
+  const sign = sunSign(sky);
+  const moonCons = A.constellationAt(b.moon.j2000.ra, b.moon.j2000.dec, DATA.bounds);
+  const up = A.PLANETS.filter(p => b[p].alt > 0 && p !== 'uranus' && p !== 'neptune');
+  const now = Date.now();
+  const ageYears = (now - info.utc) / (365.25 * 86400000);
+  const facts = { sunCons, sign, moonCons, up, ageYears };
+
+  // The star whose light, arriving tonight, set out when you were born.
+  if (ageYears > 0) {
+    let best = LIGHT[0];
+    for (const s of LIGHT) if (Math.abs(s[1] - ageYears) < Math.abs(best[1] - ageYears)) best = s;
+    facts.light = { name: best[0], ly: best[1], idx: DATA.named[best[0]] };
+  }
+  const days = Math.floor((now - info.utc) / 86400000);
+  facts.days = days;
+  facts.km = ageYears * 2 * Math.PI * 149.6e6 * 1.0; // ~940 million km per orbit
+  facts.sunUp = b.sun.alt > -6;
+  facts.sunAlt = b.sun.alt;
+  return facts;
+}
+const nf = new Intl.NumberFormat('tr-TR');
+function renderFacts(info, sky, f) {
+  const b = sky.bodies;
+  const out = [];
+  if (f.light) {
+    const L = f.light, trName = STAR_TR[L.name] || L.name;
+    const ahead = L.ly - f.ageYears;
+    const body = ahead > 0.5
+      ? `${trName} ${nf.format(L.ly)} ışık yılı uzakta. Sen doğduğunda yola çıkan ışığı henüz yolda; yaklaşık ${Math.round(ahead)} yıl sonra gözüne ulaşacak.`
+      : `${trName} ${nf.format(L.ly)} ışık yılı uzakta. Bu gece ona baktığında gördüğün ışık, sen doğduğun sıralarda yola çıktı ve tüm hayatın boyunca sana doğru yol aldı.`;
+    out.push(`<div class="fact hero"><span class="k">Senin yıldızın</span><span class="v"><em>${trName}</em></span><p>${body}</p></div>`);
+  }
+  const signTr = SIGNS[f.sign];
+  const same = SIGN_CONS[f.sign] === f.sunCons;
+  out.push(`<div class="fact"><span class="k">Güneş gerçekte</span><span class="v">${consName(f.sunCons)}</span><p>${
+    f.sunCons === 'Oph' ? `Burcun ${signTr}, ama Güneş o gün 13. "burç" sayılan Yılancı takımyıldızının önündeydi.`
+    : same ? `Burcun ${signTr} ve Güneş gerçekten de o takımyıldızın önündeydi.`
+    : `Burcun ${signTr}, ama gökyüzü 2.000 yılda kaydı: Güneş o gün aslında ${consName(f.sunCons)} takımyıldızının önündeydi.`}</p></div>`);
+  out.push(`<div class="fact"><span class="k">Ay</span><span class="v">${phaseName(b.moon)}</span><p>%${Math.round(b.moon.illum * 100)} aydınlık, ${consName(f.moonCons)} takımyıldızında. ${b.moon.alt > 0 ? `Ufkun ${Math.round(b.moon.alt)}° üstündeydi.` : 'O an ufkun altındaydı.'}</p></div>`);
+  out.push(`<div class="fact"><span class="k">Gezegenler</span><span class="v">${f.up.length ? f.up.map(p => PLANET_TR[p]).join(', ') : 'Hiçbiri'}</span><p>${f.up.length ? 'O an ufkun üstündeydi.' : 'Çıplak gözle görülen gezegenlerin hepsi ufkun altındaydı.'}${b.venus.alt > 0 && b.venus.elong > 15 ? ' Venüs, halk arasında Çoban Yıldızı, gökteki en parlak noktaydı.' : ''}</p></div>`);
+  out.push(`<div class="fact"><span class="k">O günden bu yana</span><span class="v">${nf.format(f.days)} gün</span><p>Dünya Güneş'in etrafında ${nf.format(Math.floor(f.ageYears))} tur attı; sen de onunla birlikte yaklaşık ${nf.format(Math.round(f.km / 1e9 * 10) / 10)} milyar km yol aldın.</p></div>`);
+  if (f.sunUp) out.push(`<div class="fact"><span class="k">Gündüz doğmuşsun</span><span class="v">Güneş ${f.sunAlt > 0 ? 'ufkun üstündeydi' : 'yeni batmıştı'}</span><p>Yıldızlar gün ışığında görünmez ama oradaydılar. Harita, o anki gökyüzünü Güneş ışığı olmasaydı nasıl görünecekse öyle gösteriyor.</p></div>`);
+  if (!info.timeKnown) out.push(`<div class="fact"><span class="k">Saat</span><span class="v">Gece yarısı varsayıldı</span><p>Doğum saatini girersen gökyüzü o dakikaya göre yeniden hesaplanır. Saat, hangi yıldızların ufkun üstünde olduğunu değiştirir.</p></div>`);
+  $('facts').innerHTML = out.join('');
+}
+
+// ---------------------------------------------------------------- chart drawing
+function drawPoster(ctx, W, H, info, sky, facts, theme, opts = {}) {
+  const T = THEMES[theme];
+  const m = W * 0.075, R = W * 0.41, cx = W / 2, cy = m + R + W * 0.03;
+  ctx.save();
+  ctx.fillStyle = T.bg; ctx.fillRect(0, 0, W, H);
+
+  const proj = (alt, az) => {
+    const a = Math.max(alt, -80);
+    const rr = R * Math.tan((90 - a) * D2R / 2);
+    return [cx - rr * Math.sin(az * D2R), cy - rr * Math.cos(az * D2R), rr];
+  };
+  const P = sky.P, lst = sky.lst, lat = sky.lat;
+  const sl = Math.sin(lat * D2R), cl = Math.cos(lat * D2R);
+  // J2000 (ra, dec) -> [x, y, alt]
+  function place(ra, dec) {
+    const cd = Math.cos(dec * D2R);
+    const v0 = cd * Math.cos(ra * D2R), v1 = cd * Math.sin(ra * D2R), v2 = Math.sin(dec * D2R);
+    const x = P[0][0] * v0 + P[0][1] * v1 + P[0][2] * v2, y = P[1][0] * v0 + P[1][1] * v1 + P[1][2] * v2, z = P[2][0] * v0 + P[2][1] * v1 + P[2][2] * v2;
+    const rad = Math.atan2(y, x) / D2R, decd = Math.asin(z) / D2R;
+    const H_ = (lst - rad) * D2R, sd = Math.sin(decd * D2R), cdd = Math.cos(decd * D2R);
+    const alt = Math.asin(sl * sd + cl * cdd * Math.cos(H_)) / D2R;
+    const az = Math.atan2(-cdd * Math.sin(H_), sd * cl - cdd * sl * Math.cos(H_)) / D2R;
+    const p = proj(alt, az); p[2] = alt; return p;
+  }
+
+  const label = (text, x, y, dx, dy) => {
+    if (Math.hypot(x + dx + ctx.measureText(text).width - cx, y + dy - cy) > R * 0.96) { ctx.textAlign = 'right'; ctx.fillText(text, x - dx, y + dy); }
+    else { ctx.textAlign = 'left'; ctx.fillText(text, x + dx, y + dy); }
+  };
+  // sky disc
+  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+  g.addColorStop(0, T.sky0); g.addColorStop(1, T.sky1);
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+
+  // Milky Way
+  if (!opts.fast && 'filter' in ctx) ctx.filter = `blur(${Math.max(2, W * 0.004)}px)`;
+  DATA.mw.forEach((level, li) => {
+    ctx.fillStyle = T.mw + (0.035 + li * 0.012) + ')';
+    for (const poly of level) {
+      ctx.beginPath();
+      let ok = false;
+      poly.forEach(([ra, dec], i) => { const p = place(ra, dec); if (p[2] > -60) ok = true; i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+      if (ok) ctx.fill();
+    }
+  });
+  ctx.filter = 'none';
+
+  // altitude rings (30°, 60°)
+  ctx.strokeStyle = T.line; ctx.globalAlpha = 0.35; ctx.lineWidth = W * 0.0008; ctx.setLineDash([W * 0.003, W * 0.005]);
+  for (const a of [30, 60]) { ctx.beginPath(); ctx.arc(cx, cy, proj(a, 0)[2], 0, Math.PI * 2); ctx.stroke(); }
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+
+  // constellation lines
+  ctx.strokeStyle = T.line; ctx.lineWidth = W * 0.0011; ctx.lineCap = 'round';
+  ctx.beginPath();
+  for (const id in DATA.lines) for (const seg of DATA.lines[id]) {
+    let prev = null;
+    for (const [ra, dec] of seg) {
+      const p = place(ra, dec);
+      if (prev && (prev[2] > -5 || p[2] > -5)) { ctx.moveTo(prev[0], prev[1]); ctx.lineTo(p[0], p[1]); }
+      prev = p;
+    }
+  }
+  ctx.stroke();
+
+  // stars
+  const S = DATA.stars, n = S.length / 4;
+  const sizeK = W * 0.00135;
+  for (let i = n - 1; i >= 0; i--) {
+    const mag = S[i * 4 + 2];
+    const p = place(S[i * 4], S[i * 4 + 1]);
+    if (p[2] < -1) continue;
+    const r = sizeK * Math.pow(Math.max(0.15, 6.6 - mag), 1.35) * (T.starMode === 'dark' ? 0.42 : 0.55);
+    let col;
+    if (T.starMode === 'dark') col = '29,35,51';
+    else if (T.starMode === 'gold') { const c = bvColor(S[i * 4 + 3]); col = `${Math.round(c[0] * .55 + 232 * .45)},${Math.round(c[1] * .55 + 205 * .45)},${Math.round(c[2] * .55 + 150 * .45)}`; }
+    else col = bvColor(S[i * 4 + 3]).join(',');
+    if (mag < 1.8 && T.starMode !== 'dark') {
+      const gr = r * (2.2 + (1.8 - mag) * 0.5);
+      const gl = ctx.createRadialGradient(p[0], p[1], r * 0.6, p[0], p[1], gr);
+      gl.addColorStop(0, `rgba(${col},.28)`); gl.addColorStop(1, `rgba(${col},0)`);
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(p[0], p[1], gr, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = `rgba(${col},${Math.min(1, 0.55 + (6.5 - mag) * 0.12)})`;
+    ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // constellation names
+  ctx.fillStyle = T.faint; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const cfs = W * 0.0125;
+  ctx.font = `500 ${cfs}px "IBM Plex Mono", monospace`;
+  const seenCons = new Set();
+  for (const id in DATA.cons) {
+    if (seenCons.has(id)) continue; seenCons.add(id);
+    const c = DATA.cons[id];
+    const p = place(c.pos[0], c.pos[1]);
+    if (p[2] < 4) continue;
+    if (c.rank > 2 && p[2] < 15) continue;
+    drawSpaced(ctx, c.tr.toLocaleUpperCase('tr-TR'), p[0], p[1], cfs * 0.18);
+  }
+
+  // named bright stars
+  ctx.font = `italic ${W * 0.017}px "Instrument Serif", serif`;
+  ctx.fillStyle = T.ink; ctx.textAlign = 'left';
+  for (const nm in DATA.named) {
+    const i = DATA.named[nm];
+    const mag = S[i * 4 + 2];
+    if (!(mag < 1.35 || nm === 'Polaris')) continue;
+    const p = place(S[i * 4], S[i * 4 + 1]);
+    if (p[2] < 2) continue;
+    label(STAR_TR[nm] || nm, p[0], p[1], W * 0.008, -W * 0.006);
+  }
+
+  // "your star"
+  if (facts.light && facts.light.idx != null) {
+    const i = facts.light.idx, p = place(S[i * 4], S[i * 4 + 1]);
+    if (p[2] > 0) {
+      ctx.strokeStyle = T.accent; ctx.lineWidth = W * 0.0016;
+      ctx.beginPath(); ctx.arc(p[0], p[1], W * 0.014, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = T.accent; ctx.font = `italic ${W * 0.019}px "Instrument Serif", serif`;
+      label(STAR_TR[facts.light.name] || facts.light.name, p[0], p[1], W * 0.019, W * 0.012);
+    }
+  }
+
+  // planets
+  const b = sky.bodies;
+  const toXY = body => { const p = proj(body.alt, body.az); return [p[0], p[1]]; };
+  for (const pl of A.PLANETS) {
+    const body = b[pl];
+    if (body.alt < 0) continue;
+    const [x, y] = toXY(body);
+    const r = W * (pl === 'venus' || pl === 'jupiter' ? 0.0065 : pl === 'uranus' || pl === 'neptune' ? 0.0035 : 0.005);
+    ctx.fillStyle = T.starMode === 'dark' ? T.ink : PLANET_COLOR[pl];
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    if (pl === 'saturn') { ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = W * 0.0012; ctx.beginPath(); ctx.ellipse(x, y, r * 2, r * 0.7, -0.4, 0, Math.PI * 2); ctx.stroke(); }
+    ctx.font = `500 ${W * 0.0135}px "IBM Plex Mono", monospace`; ctx.fillStyle = T.ink;
+    label(PLANET_TR[pl].toLocaleUpperCase('tr-TR'), x, y, r + W * 0.006, W * 0.001);
+  }
+
+  // Sun (only drawn if above horizon)
+  if (b.sun.alt > 0) {
+    const [x, y] = toXY(b.sun);
+    ctx.strokeStyle = T.accent; ctx.fillStyle = T.accent; ctx.lineWidth = W * 0.0015;
+    ctx.beginPath(); ctx.arc(x, y, W * 0.012, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, W * 0.003, 0, Math.PI * 2); ctx.fill();
+    ctx.font = `italic ${W * 0.019}px "Instrument Serif", serif`;
+    label('Güneş', x, y, W * 0.018, W * 0.012);
+  }
+
+  // Moon with its real phase, bright limb toward the Sun
+  if (b.moon.alt > -1) {
+    const [x, y] = toXY(b.moon);
+    const sp = proj(b.sun.alt, b.sun.az);
+    const ang = Math.atan2(sp[1] - y, sp[0] - x);
+    drawMoon(ctx, x, y, W * 0.016, b.moon.illum, ang, T);
+    ctx.font = `italic ${W * 0.019}px "Instrument Serif", serif`; ctx.fillStyle = T.ink;
+    label('Ay', x, y, W * 0.022, -W * 0.014);
+  }
+  ctx.restore(); // end clip
+
+  // horizon ring with azimuth ticks and cardinal points
+  ctx.strokeStyle = T.ring; ctx.lineWidth = W * 0.0018;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+  ctx.lineWidth = W * 0.0008;
+  ctx.beginPath(); ctx.arc(cx, cy, R * 1.035, 0, Math.PI * 2); ctx.stroke();
+  for (let az = 0; az < 360; az += 5) {
+    const len = az % 30 === 0 ? 0.035 : az % 10 === 0 ? 0.022 : 0.012;
+    const s = Math.sin(az * D2R), c = Math.cos(az * D2R);
+    ctx.beginPath(); ctx.moveTo(cx - R * s, cy - R * c); ctx.lineTo(cx - R * (1 + len) * s, cy - R * (1 + len) * c); ctx.stroke();
+  }
+  ctx.fillStyle = T.ink; ctx.font = `400 ${W * 0.024}px "Instrument Serif", serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (const [lbl, az] of [['K', 0], ['D', 90], ['G', 180], ['B', 270]]) {
+    const s = Math.sin(az * D2R), c = Math.cos(az * D2R);
+    ctx.fillText(lbl, cx - R * 1.075 * s, cy - R * 1.075 * c);
+  }
+
+  // text block
+  const blockH = W * (st.msg ? 0.2 : 0.14), top = cy + R * 1.1, bottom = H - m * 1.5;
+  const ty = top + Math.max(0, (bottom - top - blockH) / 2) - W * 0.012;
+  ctx.fillStyle = T.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  const title = st.name ? st.name : 'Doğduğun gece';
+  ctx.font = `400 ${fitSize(ctx, title, W * 0.062, W - 2 * m, '"Instrument Serif", serif')}px "Instrument Serif", serif`;
+  ctx.fillText(title, cx, ty + W * 0.05);
+  const dateLine = `${info.d} ${MONTHS[info.mo - 1]} ${info.y}, ${DAYS[new Date(Date.UTC(info.y, info.mo - 1, info.d)).getUTCDay()]}` + (info.timeKnown ? ` · ${String(info.h).padStart(2, '0')}:${String(info.mi).padStart(2, '0')}` : '');
+  ctx.font = `italic ${W * 0.027}px "Instrument Serif", serif`;
+  ctx.fillText(dateLine, cx, ty + W * 0.093);
+  ctx.font = `500 ${W * 0.0145}px "IBM Plex Mono", monospace`;
+  ctx.fillStyle = T.faint;
+  const latS = `${Math.abs(info.lat).toFixed(2)}° ${info.lat >= 0 ? 'K' : 'G'}`, lonS = `${Math.abs(info.lon).toFixed(2)}° ${info.lon >= 0 ? 'D' : 'B'}`;
+  drawSpaced(ctx, `${info.place.toLocaleUpperCase('tr-TR')}   ·   ${latS}  ${lonS}`, cx, ty + W * 0.128, W * 0.0028);
+  if (st.msg) {
+    ctx.fillStyle = T.ink; ctx.font = `italic ${W * 0.022}px "Instrument Serif", serif`;
+    wrapText(ctx, `“${st.msg}”`, cx, ty + W * 0.172, W - 2.4 * m, W * 0.028);
+  }
+  // footer facts
+  ctx.fillStyle = T.faint; ctx.font = `500 ${W * 0.0118}px "IBM Plex Mono", monospace`;
+  const moon = `AY ${Math.round(b.moon.illum * 100)}% · ${consName(facts.moonCons).toLocaleUpperCase('tr-TR')}`;
+  const sun = `GÜNEŞ · ${consName(facts.sunCons).toLocaleUpperCase('tr-TR')}`;
+  const star = facts.light ? `YILDIZIN · ${(STAR_TR[facts.light.name] || facts.light.name).toLocaleUpperCase('tr-TR')}` : '';
+  drawSpaced(ctx, [sun, moon, star].filter(Boolean).join('     '), cx, H - m * 0.85, W * 0.0022);
+
+  ctx.restore();
+}
+function drawSpaced(ctx, text, x, y, spacing) {
+  if ('letterSpacing' in ctx) { const prev = ctx.letterSpacing; ctx.letterSpacing = spacing + 'px'; ctx.fillText(text, x + spacing / 2, y); ctx.letterSpacing = prev; }
+  else ctx.fillText(text, x, y);
+}
+function fitSize(ctx, text, size, maxW, family) {
+  ctx.font = `400 ${size}px ${family}`;
+  const w = ctx.measureText(text).width;
+  return w > maxW ? size * maxW / w : size;
+}
+function wrapText(ctx, text, x, y, maxW, lh) {
+  const words = text.split(/\s+/); let line = '', lines = [];
+  for (const w of words) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+  lines.push(line);
+  lines.slice(0, 2).forEach((l, i) => ctx.fillText(l, x, y + i * lh));
+}
+function drawMoon(ctx, x, y, r, k, ang, T) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+  const lit = T.starMode === 'dark' ? '#1d2333' : '#f4efe0', dark = T.starMode === 'dark' ? 'rgba(29,35,51,.12)' : 'rgba(255,255,255,.08)';
+  ctx.fillStyle = dark; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = T.starMode === 'dark' ? 'rgba(29,35,51,.4)' : 'rgba(255,255,255,.25)'; ctx.lineWidth = r * 0.06; ctx.stroke();
+  // lit half faces +x (toward the Sun); the terminator is an ellipse
+  ctx.fillStyle = lit;
+  ctx.beginPath();
+  ctx.arc(0, 0, r, -Math.PI / 2, Math.PI / 2, false);
+  const ex = r * Math.abs(1 - 2 * k);
+  ctx.ellipse(0, 0, ex, r, 0, Math.PI / 2, -Math.PI / 2, k < 0.5);
+  ctx.fill();
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- render loop
+const canvas = $('poster');
+function sizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = Math.max(300, Math.round(rect.width * dpr));
+  canvas.width = w; canvas.height = Math.round(w * 7 / 5);
+}
+let lastSky = null, lastFacts = null, lastInfo = null;
+function render(fast) {
+  if (!model) return;
+  const ms = model.info.utc + st.shift * 60000;
+  const sky = A.sky(new Date(ms), model.info.lat, model.info.lon);
+  const info = st.shift ? Object.assign({}, model.info, wallClock(ms, model.info.tz), { timeKnown: true }) : model.info;
+  lastSky = sky; lastInfo = info; lastFacts = model.facts;
+  drawPoster(canvas.getContext('2d'), canvas.width, canvas.height, info, sky, model.facts, st.theme, { fast });
+}
+function update() {
+  readForm();
+  const info = compute();
+  if (!info) return;
+  const sky = A.sky(new Date(info.utc), info.lat, info.lon);
+  const facts = buildFacts(info, sky);
+  model = { info, sky, facts };
+  renderFacts(info, sky, facts);
+  render(false);
+}
+
+// ---------------------------------------------------------------- UI wiring
+const citySel = $('city');
+CITIES.forEach((c, i) => { const o = document.createElement('option'); o.value = i; o.textContent = c[0]; citySel.appendChild(o); });
+const themesEl = $('themes');
+Object.entries(THEMES).forEach(([k, t]) => {
+  const bt = document.createElement('button'); bt.type = 'button'; bt.textContent = t.label; bt.dataset.k = k;
+  bt.addEventListener('click', () => { st.theme = k; syncThemes(); render(false); });
+  themesEl.appendChild(bt);
+});
+function syncThemes() { themesEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === st.theme))); }
+syncThemes();
+
+// Example values so the first view shows a finished poster (clearly an example until edited).
+$('date').value = '2000-01-01'; $('time').value = '00:00'; $('name').value = 'Örnek: Milenyum gecesi';
+citySel.value = '0';
+
+let deb;
+$('form').addEventListener('input', () => { clearTimeout(deb); deb = setTimeout(update, 120); });
+$('customBox').addEventListener('toggle', update);
+
+const shift = $('shift'), shiftOut = $('shiftOut');
+function fmtShift(v) {
+  if (!v) return 'doğum anı';
+  const s = v > 0 ? '+' : '−', a = Math.abs(v);
+  return `${s}${Math.floor(a / 60)} sa ${String(a % 60).padStart(2, '0')} dk`;
+}
+shift.addEventListener('input', () => { st.shift = +shift.value; shiftOut.textContent = fmtShift(st.shift); render(true); });
+shift.addEventListener('change', () => render(false));
+
+let playing = false, playT0 = 0, playFrom = 0;
+const playBtn = $('play');
+playBtn.addEventListener('click', () => {
+  playing = !playing;
+  playBtn.setAttribute('aria-pressed', String(playing));
+  playBtn.textContent = playing ? 'Durdur' : 'Geceyi oynat';
+  if (playing) { playT0 = performance.now(); playFrom = st.shift <= -720 || st.shift >= 720 ? -720 : st.shift; requestAnimationFrame(tickPlay); }
+  else render(false);
+});
+function tickPlay(now) {
+  if (!playing) return;
+  const minutes = playFrom + (now - playT0) / 1000 * 90; // 90 sky-minutes per second
+  if (minutes > 720) { playing = false; playBtn.setAttribute('aria-pressed', 'false'); playBtn.textContent = 'Geceyi oynat'; st.shift = 0; shift.value = 0; shiftOut.textContent = fmtShift(0); render(false); return; }
+  st.shift = Math.round(minutes); shift.value = st.shift; shiftOut.textContent = fmtShift(st.shift);
+  render(true);
+  requestAnimationFrame(tickPlay);
+}
+
+const toastEl = $('toast'); let toastT;
+function toast(msg) { toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => toastEl.hidden = true, 3500); }
+
+$('copy').addEventListener('click', () => {
+  if (!model) return;
+  const { info, facts } = model, b = model.sky.bodies;
+  const lines = [
+    `${info.d} ${MONTHS[info.mo - 1]} ${info.y}${info.timeKnown ? ', ' + String(info.h).padStart(2, '0') + ':' + String(info.mi).padStart(2, '0') : ''} · ${info.place}`,
+    `☉ Güneş: ${consName(facts.sunCons)} takımyıldızında (burcum ${SIGNS[facts.sign]})`,
+    `☾ Ay: ${phaseName(b.moon)}, %${Math.round(b.moon.illum * 100)}`,
+    facts.light ? `✦ Benim yıldızım: ${STAR_TR[facts.light.name] || facts.light.name}. Bu gece gördüğüm ışığı ben doğarken yola çıktı.` : '',
+  ].filter(Boolean).join('\n');
+  const done = () => toast('Paylaşım metni kopyalandı.');
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(lines).then(done, () => fallbackCopy(lines));
+  else fallbackCopy(lines);
+});
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('Paylaşım metni kopyalandı.'); } catch { toast('Kopyalanamadı. Metni seçip elle kopyala.'); }
+  ta.remove();
+}
+
+// Poster download through the viewer's save dialog.
+let downloads = null;
+(async () => {
+  try { downloads = window.claude?.use ? await window.claude.use('downloads') : null; } catch { downloads = null; }
+  $('save').hidden = !downloads; $('saveNote').hidden = !!downloads;
+})();
+$('save').addEventListener('click', async () => {
+  if (!model || !downloads) return;
+  const off = document.createElement('canvas'); off.width = 3000; off.height = 4200;
+  const ms = model.info.utc + st.shift * 60000;
+  drawPoster(off.getContext('2d'), off.width, off.height, lastInfo || model.info, A.sky(new Date(ms), model.info.lat, model.info.lon), model.facts, st.theme, { fast: false });
+  off.toBlob(async blob => {
+    if (!blob) { toast('Poster oluşturulamadı.'); return; }
+    const base = (st.name || 'gokyuzu').toLocaleLowerCase('tr-TR').replace(/[^a-z0-9çğıöşü]+/g, '-').replace(/^-|-$/g, '') || 'gokyuzu';
+    try { await downloads.save({ filename: `${base}-${model.info.y}.png`, data: blob }); toast('Poster kaydedildi.'); }
+    catch (e) {
+      if (e?.code === 'declined') return;
+      if (e?.code === 'rate_limited') { toast('Bir kaydetme penceresi zaten açık.'); return; }
+      $('save').hidden = true; $('saveNote').hidden = false;
+    }
+  }, 'image/png');
+});
+
+addEventListener('resize', () => { sizeCanvas(); render(false); });
+sizeCanvas();
+update();
+document.fonts?.ready.then(() => { fontsReady = true; render(false); });
+Promise.all(['400 20px "Instrument Serif"', 'italic 20px "Instrument Serif"', '500 20px "IBM Plex Mono"'].map(f => document.fonts?.load(f))).then(() => render(false)).catch(() => {});
+})();
+</script>
